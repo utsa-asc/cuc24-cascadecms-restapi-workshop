@@ -1,57 +1,39 @@
-# Cascade CMS API Library
+# Cascade CMS Rest API JS Library
 
-### **Please note this library is a work in progress. If you come across a bug please open an issue.**
-
-A JavaScript library for the Cascade CMS API. You can find more information about their API here: https://www.hannonhill.com/cascadecms/latest/developing-in-cascade/rest-api/index.html#Operations
+A client side JavaScript library for the Cascade CMS Rest API. You can find more information about the Rest API here: https://www.hannonhill.com/cascadecms/latest/developing-in-cascade/rest-api/index.html
 
 Available for Cascade CMS v8.1.1 and later.
 
+### **Please note this library is a work in progress. If you come across a bug please open an issue.**
+
 ## Cascade Documentation
 
-You can find an openAPI representation of the Cascade library here:
+You can find an openAPI representation of Cascade CMS's WSDL operations here:
 
-https://kuklaph.github.io/cascade-cms-api/swagger-ui/
+https://nandoblanco.github.io/cascade-cms-rest-api-js/swagger-ui/
 
-Cascade provides in tandem with the REST API docs listed above, a WSDL operations page. In order to access this you will need to use your organization as a subdomain followed by this url:
+All infomration originates from Cascade CMS's WSDL operations page. In order to access this you will need to use your organization as a subdomain followed by this url:
 
 `cascadecms.com/ws/services/AssetOperationService?wsdl`
 
-Example: `isSandActuallySandy.cascadecms.com/ws/services/AssetOperationService?wsdl`
+Example: `yourSubDomain.cascadecms.com/ws/services/AssetOperationService?wsdl`
 
 ## Install
 
-This can be used either via NodeJS or Google Apps Script.
-
-Download/Copy the files and extract the zip. Once extracted to your project, use `npm ci` to install dependencies.
-
-### NodeJS
-
-In your project file import the Cascade API.
-
 ```js
-import { CascadeAPI, Types } from "../cascade-cms-api/nodejs/main.mjs";
+<script src="cascade-restapi.js"></script>
 ```
-
-### Google Apps Script
-
-In order to use this library within a Google Apps Script (GAS) project you will need to copy the `main.js` and paste the contents as a new `.gs` file in your project.
 
 ## General Usage
 
-To use the library you will need to instantiate the `CascadeAPI` function and pass it an object:
-
-`{ apiKey: "", url: "" }`
+To use the library you will need to define your Cascade CMS URL and Cascade CMS API Key.
 
 ```js
-const cascadeAPI = CascadeAPI({
-  apiKey: "",
-  url: "https://isSandActuallySandy.cascadecms.com/api/v1/",
-});
+const cmsUrl = "https://xxxx.cascadecms.com/";
+const cmsAPI = "xxxxx-xxx-xxxx-xxx-xxxxxx";
 ```
 
 The `apiKey` is generated in your Cascade dashboard. The `url` is `yourOrg.cascadecms.com/api/v1/` (this is the current version as of 1/9/2023).
-
-If you are using this in Google Apps Script the async/await pattern is not used/required. GAS does not follow this pattern.
 
 ```js
 //Nodejs
@@ -69,22 +51,4 @@ const readFile = async () => {
   });
   //...
 };
-```
-
-Types are optional. You can add type definitions which may be helpful depending on the situation:
-
-```js
-/**
- * @type {Types.EntityTypeString}
- */
-const type = "page";
-
-const read = await cascadeAPI.read({
-  identifier: {
-    type: "page", // inline gives you intellisense
-    type, // uses type from above and you get intellisense within the variable above
-    id: "d3631e59ac1easd2434bd70be3fbfe8148abc",
-    //...
-  },
-});
 ```
