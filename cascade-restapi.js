@@ -1,5 +1,7 @@
-const cmsUrl = "https://xxxx.cascadecms.com/";
-const cmsAPI = "xxxxx-xxx-xxxx-xxx-xxxxxx";
+const cmsUrl = "https://yourOrg.cascadecms.com/";
+const cmsAPI = "xxxxxxxxx-xx-xxxx-xxxx";
+
+const headers = { "Authorization": "Bearer " + cmsAPI };
 
 function readAsset(a) {
     if (a.type == "user") {
@@ -14,15 +16,13 @@ function readAsset(a) {
         console.log("Fetch URL " + url);
     }
     return new Promise(function(resolve, reject) {
-        fetch(url, {
-                headers: headers
-            })
+        fetch(url, { headers: headers })
             .then((r) => r.json())
             .then((data) => {
                 if (data.success) {
-                    resolve({ status: "Read Success", asset: a, apiReturn: data, url: url });
+                    resolve({ status: "Success", sent: a, apiReturn: data, url: url });
                 } else {
-                    reject({ status: "Read Error", error: data.message, asset: a, apiReturn: data, url: url });
+                    reject({ status: "Error", error: data.message, sent: a, apiReturn: data, url: url });
                 }
             });
     });

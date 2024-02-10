@@ -34,4 +34,24 @@ Example Operations
 
 ```js
 
+readAsset({
+    type: "page",
+    id: "page ID",
+}).then(function(result) {
+    console.log(result);
+}).catch(function(error) {
+    console.log(error);
+});
+
+readAsset({
+    type: "block",
+    path: "blockpath",
+    site: "Site Name"
+}).then(function(result) {
+    console.log(result);
+}).catch(function(error) {
+    console.log(error);
+});
+
+
 ```

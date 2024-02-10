@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+</head>
+
+<body>
+    <script src="../cascade-restapi.js"></script>
+    <script>
+        // you can see all the assets you can read on the operations documentaion under "ReadRequest"
+
+        // read asset using asset ID
+
+        readAsset({
+            type: "page",
+            id: "73a86c1fc0a8005f0081296adc8c9cf9",
+        }).then(function(result) {
+            console.log(result);
+        }).catch(function(error) {
+            console.log(error);
+        });
+
+        // read asset using asset Path
+
+        readAsset({
+            type: "block",
+            path: "rss-example",
+            site: "Exchange Module - Events"
+        }).then(function(result) {
+            console.log(result);
+        }).catch(function(error) {
+            console.log(error);
+        });
+
+        // there are multiple block types (FEED, INDEX, XHTML_DATADEFINITION, block_XML, etc) but all can be read with the type "block"
+        // the api return, in the result will specify the type of asset, including the specific block type
+    </script>
+</body>
+
+</html>
