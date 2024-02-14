@@ -1,8 +1,7 @@
-// const cmsUrl = "https://yourOrg.cascadecms.com/";
-// const cmsAPI = "xxxxxxxxx-xx-xxxx-xxxx";
+const cmsUrl = "https://yourOrg.cascadecms.com/";
+const cmsAPI = "xxxxxxxxx-xx-xxxx-xxxx";
 
-const cmsUrl = "https://services.cascadecms.com/";
-const cmsAPI = "a325b5d5-e75f-4e2d-b961-d93895231eea";
+
 
 const headers = { "Authorization": "Bearer " + cmsAPI };
 

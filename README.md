@@ -46,7 +46,7 @@ readAsset({
 readAsset({
     type: "block",
     path: "blockpath",
-    site: "Site Name"
+    siteName: "Site Name"
 }).then(function(result) {
     console.log(result);
 }).catch(function(error) {
