@@ -14,15 +14,9 @@ All information originates from Cascade CMS's WSDL operations page. In order to 
 
 Example: `yourOrg.cascadecms.com/ws/services/AssetOperationService?wsdl`
 
-## Library Installation
-
-```js
-<script src="cascade-restapi.js"></script>
-```
-
 ## General Usage
 
-To use the library you will need to define your Cascade CMS URL and Cascade CMS API Key (v8.16 and later). The `apiKey` is generated in your Cascade dashboard. The `url` is `yourOrg.cascadecms.com/api/v1/` (this is the current version as of 1/9/2023).
+To use the library you will need to define your Cascade CMS URL and Cascade CMS [API Key](https://www.hannonhill.com/cascadecms/latest/cascade-basics/account-settings.html#APIKey) (v8.16 and later). The `apiKey` is generated in your Cascade dashboard. The `url` is `yourOrg.cascadecms.com/api/v1/` (this is the current version as of 1/9/2023).
 
 ```js
 //Example
