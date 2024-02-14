@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+</head>
+
+<body>
+    <script src="../../cascade-restapi.js"></script>
+    <script>
+        // to delete an asset, you have to provide the current asset's type, path/id, new asset name and folder information
+
+        // delete asset using asset ID 
+        // deleting using the asset ID will check if already deleted and found in Recycle Bin
+
+        deleteAsset({
+            type: "page",
+            id: "9f224139c0a8002f45f9e97a68c3bd07", // fill in
+        }).then(function(result) {
+            console.log(result);
+        }).catch(function(error) {
+            console.log(error);
+        });
+
+        // delete asset using asset path
+        // deleting using the asset path will check if path exists before attempting to delete
+
+        deleteAsset({
+            type: "page",
+            path: "/dir4/page", // fill in
+            siteName: "_fernando", // fill in
+        }).then(function(result) {
+            console.log(result);
+        }).catch(function(error) {
+            console.log(error);
+        });
+    </script>
+</body>
+
+</html>

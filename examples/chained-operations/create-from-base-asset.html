@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+</head>
+
+<body>
+    <script src="../../cascade-restapi.js"></script>
+    <script>
+        // to create an asset from another asset (like a base asset) we copy an asset, read the copy then edit the copy
+        // we'll set up some VARS to make things easier down the road
+
+        var assetType = "page"; // fill in
+        var baseAssetID = "73a86b52c0a8005f0081296a8d8cfe5b"; // fill in
+        var newName = "new-name-test"; // fill in
+        var newFolderPath = "2024"; // fill in
+        var newFolderSiteName = "Exchange Module - Events"; // fill in
+
+        // #1 first we copy
+        copyAsset({
+            type: assetType,
+            id: baseAssetID,
+            copyParameters: {
+                newName: newName,
+                destinationContainerIdentifier: {
+                    type: "folder",
+                    path: {
+                        path: newFolderPath,
+                        siteName: newFolderSiteName
+                    }
+                }
+            }
+        }).then(function(result) {
+            console.log(result);
+            // #2 then we read
+            readAsset({
+                type: "page",
+                path: newFolderPath + "/" + newName,
+                siteName: newFolderSiteName,
+                // the copy operation does NOT return a new asset ID so we use the same global vars we used to create the copy to read the copy
+                /*
+                // path: result.sent.copyParameters.destinationContainerIdentifier.path.path + "/" + result.sent.copyParameters.newName,
+                // siteName: result.sent.copyParameters.destinationContainerIdentifier.path.siteName,
+                // another option is to use the parameters we passed in from result
+                */
+            }).then(function(result) {
+                console.log(result);
+                // #3 then we edit
+                result.apiReturn.asset.page.metadata.title = "NEW COPY TITLE";
+                editAsset({
+                    asset: result.apiReturn,
+                }).then(function(result) {
+                    console.log(result);
+                }).catch(function(error) {
+                    console.log(error);
+                });
+                // using the edit fuction, we send back the edited object, in this case, the updated page
+            }).catch(function(error) {
+                console.log(error);
+            });
+        }).catch(function(error) {
+            console.log(error);
+        });
+    </script>
+</body>
+
+</html>

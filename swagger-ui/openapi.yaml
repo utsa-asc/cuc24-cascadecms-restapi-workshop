@@ -72,16 +72,16 @@ info:
           }
           ```
 tags:
-  - name: Examples
-    description: Various ways to interact with the API
-  - name: POST Only
-    description: These interact with POST and a Bearer API Key
+  # - name: Examples
+  #   description: Various ways to interact with the API
+  # - name: Examples
+    # description: These interact with POST and a Bearer API Key
 
 servers:
   - url: "https://{yourOrg}.cascadecms.com/api/v1"
     variables:
       yourOrg:
-        default: "demo"
+        default: "workshops"
         description: "Your organization identifier in Cascade CMS"
 
 security:
@@ -5469,74 +5469,74 @@ components:
         - $ref: "#/components/schemas/OperationResult"
 
 paths:
-  /read/{type}/{id}:
-    get:
-      description: |
-        Example: `https://{yourOrg}.cascadecms.com/api/v1/read/page/www.example.com/news/2003/best-of-show?u=hill&p=hill`
-      tags:
-        - Examples
-      operationId: readNoPath
-      summary: Read resource by type and ID
-      parameters:
-        - name: u
-          in: query
-          required: true
-          description: Username
-          schema:
-            type: string
-            example: hill
-        - name: p
-          in: query
-          required: true
-          description: Password
-          schema:
-            type: string
-            example: hill
-        - name: type
-          in: path
-          required: true
-          description: Type of the resource (e.g., "folder", "page").
-          schema:
-            type: string
-            example: folder
-        - name: id
-          in: path
-          required: true
-          description: Id of the resource.
-          schema:
-            type: string
-            example: 2b2fd9bc7f0000010044b22e65131cd3
-  /read/{type}/{siteName}/{path}:
-    get:
-      description: "This is an example read operation"
-      tags:
-        - Examples
-      operationId: readWithPath
-      summary: Read resource by type, site name, and path
-      parameters:
-        - name: type
-          in: path
-          required: true
-          description: Type of the resource (e.g., "folder", "page").
-          schema:
-            type: string
-        - name: siteName
-          in: path
-          required: true
-          description: Name of the site.
-          schema:
-            type: string
-        - name: path
-          in: path
-          required: true
-          description: Path to the resource within the site.
-          schema:
-            type: string
+  # /read/{type}/{id}:
+  #   get:
+  #     description: |
+  #       Example: `https://{yourOrg}.cascadecms.com/api/v1/read/page/www.example.com/news/2003/best-of-show?u=hill&p=hill`
+  #     tags:
+  #       - Examples
+  #     operationId: readNoPath
+  #     summary: Read resource by type and ID
+  #     parameters:
+  #       - name: u
+  #         in: query
+  #         required: true
+  #         description: Username
+  #         schema:
+  #           type: string
+  #           example: hill
+  #       - name: p
+  #         in: query
+  #         required: true
+  #         description: Password
+  #         schema:
+  #           type: string
+  #           example: hill
+  #       - name: type
+  #         in: path
+  #         required: true
+  #         description: Type of the resource (e.g., "folder", "page").
+  #         schema:
+  #           type: string
+  #           example: folder
+  #       - name: id
+  #         in: path
+  #         required: true
+  #         description: Id of the resource.
+  #         schema:
+  #           type: string
+  #           example: 2b2fd9bc7f0000010044b22e65131cd3
+  # /read/{type}/{siteName}/{path}:
+  #   get:
+  #     description: "This is an example read operation"
+  #     tags:
+  #       - Examples
+  #     operationId: readWithPath
+  #     summary: Read resource by type, site name, and path
+  #     parameters:
+  #       - name: type
+  #         in: path
+  #         required: true
+  #         description: Type of the resource (e.g., "folder", "page").
+  #         schema:
+  #           type: string
+  #       - name: siteName
+  #         in: path
+  #         required: true
+  #         description: Name of the site.
+  #         schema:
+  #           type: string
+  #       - name: path
+  #         in: path
+  #         required: true
+  #         description: Path to the resource within the site.
+  #         schema:
+  #           type: string
   /read:
     post:
       description: Use this method to read an asset
       tags:
-        - POST Only
+        - Test an Operation
       operationId: read
       summary: "Read an asset"
       requestBody:
@@ -5559,7 +5559,7 @@ paths:
     post:
       description: Use this method to delete an asset
       tags:
-        - POST Only
+        - Test an Operation
       operationId: delete
       summary: "Remove an asset"
       requestBody:
@@ -5583,7 +5583,7 @@ paths:
     post:
       description: Use this method to edit an asset
       tags:
-        - POST Only
+        - Test an Operation
       operationId: edit
       summary: "Edit an asset"
       requestBody:
@@ -5607,7 +5607,7 @@ paths:
     post:
       description: Use this method to create an asset
       tags:
-        - POST Only
+        - Test an Operation
       operationId: create
       summary: "Create an asset"
       requestBody:
@@ -5631,7 +5631,7 @@ paths:
     post:
       description: Use this method to move an asset
       tags:
-        - POST Only
+        - Test an Operation
       operationId: move
       summary: "Move an asset"
       requestBody:
@@ -5655,7 +5655,7 @@ paths:
     post:
       description: Use this method to search for assets
       tags:
-        - POST Only
+        - Test an Operation
       operationId: search
       summary: "Search for assets"
       requestBody:
@@ -5679,7 +5679,7 @@ paths:
     post:
       description: Use this method to copy an asset
       tags:
-        - POST Only
+        - Test an Operation
       operationId: copy
       summary: "Copy an asset"
       requestBody:
@@ -5703,7 +5703,7 @@ paths:
     post:
       description: Use this method to copy a site
       tags:
-        - POST Only
+        - Test an Operation
       operationId: siteCopy
       summary: "Copy a site"
       requestBody:
@@ -5727,7 +5727,7 @@ paths:
     post:
       description: Use this method to read access rights
       tags:
-        - POST Only
+        - Test an Operation
       operationId: readAccessRights
       summary: "Read access rights of an asset"
       requestBody:
@@ -5751,7 +5751,7 @@ paths:
     post:
       description: Use this method to edit access rights
       tags:
-        - POST Only
+        - Test an Operation
       operationId: editAccessRights
       summary: "Edit access rights of an asset"
       requestBody:
@@ -5775,7 +5775,7 @@ paths:
     post:
       description: Use this method to read workflow settings
       tags:
-        - POST Only
+        - Test an Operation
       operationId: readWorkflowSettings
       summary: "Read workflow settings of an asset"
       requestBody:
@@ -5799,7 +5799,7 @@ paths:
     post:
       description: Use this method to edit workflow settings
       tags:
-        - POST Only
+        - Test an Operation
       operationId: editWorkflowSettings
       summary: "Edit workflow settings of an asset"
       requestBody:
@@ -5823,7 +5823,7 @@ paths:
     post:
       description: Use this method to list subscribers of an asset
       tags:
-        - POST Only
+        - Test an Operation
       operationId: listSubscribers
       summary: "List subscribers of an asset"
       requestBody:
@@ -5847,7 +5847,7 @@ paths:
     post:
       description: Use this method to read a list of messages
       tags:
-        - POST Only
+        - Test an Operation
       operationId: listMessages
       summary: "List messages"
       requestBody:
@@ -5871,7 +5871,7 @@ paths:
     post:
       description: Use this method to mark messages read or unread
       tags:
-        - POST Only
+        - Test an Operation
       operationId: markMessage
       summary: "Mark a message as read or unread"
       requestBody:
@@ -5895,7 +5895,7 @@ paths:
     post:
       description: Use this method to delete a message
       tags:
-        - POST Only
+        - Test an Operation
       operationId: deleteMessage
       summary: "Delete a message"
       requestBody:
@@ -5919,7 +5919,7 @@ paths:
     post:
       description: Use this method to checkout an asset
       tags:
-        - POST Only
+        - Test an Operation
       operationId: checkOut
       summary: "Check out an asset for editing"
       requestBody:
@@ -5943,7 +5943,7 @@ paths:
     post:
       description: Use this method to check in an asset
       tags:
-        - POST Only
+        - Test an Operation
       operationId: checkIn
       summary: "Check in an edited asset"
       requestBody:
@@ -5967,7 +5967,7 @@ paths:
     post:
       description: Use this method to list existing sites
       tags:
-        - POST Only
+        - Test an Operation
       operationId: listSites
       summary: "List all sites"
       requestBody:
@@ -5991,7 +5991,7 @@ paths:
     post:
       description: Use this method to read audits of an asset
       tags:
-        - POST Only
+        - Test an Operation
       operationId: readAudits
       summary: "Read audit records"
       requestBody:
@@ -6015,7 +6015,7 @@ paths:
     post:
       description: Use this method to read workflow information
       tags:
-        - POST Only
+        - Test an Operation
       operationId: readWorkflowInformation
       summary: "Read Workflow Information"
       requestBody:
@@ -6039,7 +6039,7 @@ paths:
     post:
       description: Use this method to perform a workflow
       tags:
-        - POST Only
+        - Test an Operation
       operationId: performWorkflowTransition
       summary: "Perform Workflow Transition"
       requestBody:
@@ -6063,7 +6063,7 @@ paths:
     post:
       description: Use this method to view read preferences
       tags:
-        - POST Only
+        - Test an Operation
       operationId: readPreferences
       summary: "Read Preferences"
       requestBody:
@@ -6087,7 +6087,7 @@ paths:
     post:
       description: Use this method to publish or unpublish an asset
       tags:
-        - POST Only
+        - Test an Operation
       operationId: publish
       summary: "Publish or Unpublish Asset"
       requestBody:

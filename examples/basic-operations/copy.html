@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+</head>
+
+<body>
+    <script src="../../cascade-restapi.js"></script>
+    <script>
+        // to copy an asset, you have to provide the current asset's type, path/id, new asset name and folder information
+
+        // copy asset using asset ID and folder ID
+
+        copyAsset({
+            type: "page",
+            id: "73a86c1fc0a8005f0081296adc8c9cf9", // fill in
+            copyParameters: {
+                newName: "test-new-page", // fill in
+                destinationContainerIdentifier: {
+                    type: "folder",
+                    id: "73a86953c0a8005f0081296abcb95309" // fill in
+                }
+            }
+        }).then(function(result) {
+            console.log(result);
+        }).catch(function(error) {
+            console.log(error);
+            // the error "The validated expression is false" usually means the new asset name does NOT meet the naming convention requirements and/or contains an illegal character
+        });
+
+        // copy asset using asset path and folder path
+
+        copyAsset({
+            type: "page",
+            path: "recurring/example-4", // fill in
+            siteName: "Exchange Module - Events", // fill in
+            copyParameters: {
+                newName: "example-42222", // fill in
+                destinationContainerIdentifier: {
+                    type: "folder",
+                    path: {
+                        path: "recurring", // fill in
+                        siteName: "Exchange Module - Events", // fill in
+                    }
+                }
+            }
+            // folder information is required even if the copy should go in the same folder as the original asset
+        }).then(function(result) {
+            console.log(result);
+        }).catch(function(error) {
+            console.log(error);
+        });
+    </script>
+</body>
+
+</html>

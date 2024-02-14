@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+</head>
+
+<body>
+    <script src="../../cascade-restapi.js"></script>
+    <script>
+        // to edit an asset, you should read it first, make your changes and then send the edited version of the asset back to the CMS
+
+        // read asset using asset ID
+
+        readAsset({
+            type: "page",
+            id: "73a86c1fc0a8005f0081296adc8c9cf9", // fill in
+        }).then(function(result) {
+            console.log(result);
+            // lets change the title
+            result.apiReturn.asset.page.metadata.title = "NEW TITLE";
+            // using dot notation, we drill down to the node (field) we want to edit
+            // as an object property, it's value can be replaced 
+            // now the whole object is updated
+
+            editAsset({
+                asset: result.apiReturn,
+            }).then(function(result) {
+                console.log(result);
+            }).catch(function(error) {
+                console.log(error);
+            });
+
+            // using the edit fuction, we send back the edited object 
+
+        }).catch(function(error) {
+            console.log(error);
+        });
+    </script>
+</body>
+
+</html>

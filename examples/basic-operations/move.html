@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+</head>
+
+<body>
+    <script src="../../cascade-restapi.js"></script>
+    <script>
+        // to move an asset, you have to provide the current asset's type, path/id and new folder information
+
+        // move asset using asset and folder ID
+
+        moveAsset({
+            type: "page",
+            id: "062a02e0ac1e004c627a5a864ac073a6", // fill in
+            moveParameters: {
+                destinationContainerIdentifier: {
+                    id: "9dcfcbf4c0a8002f45f9e97af0a0bb24", // fill in
+                    type: "folder",
+                }
+            }
+        }).then(function(result) {
+            console.log(result);
+        }).catch(function(error) {
+            console.log(error);
+            // if you see the error "The selected folder could not be found." make sure the folder id/path is correct
+        });
+
+        // move asset using asset path 
+
+        moveAsset({
+            type: "block",
+            path: "test2", // fill in
+            siteName: "_fernando", // fill in
+            moveParameters: {
+                destinationContainerIdentifier: {
+                    id: "660d1590ac1e004c026062effc7aaeb7", // fill in
+                    type: "folder",
+                },
+                newName: "test333", // fill in
+            }
+            // the move operation is also used for renaming assets
+        }).then(function(result) {
+            console.log(result);
+        }).catch(function(error) {
+            console.log(error);
+
+        });
+    </script>
+</body>
+
+</html>

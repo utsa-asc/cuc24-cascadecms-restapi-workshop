@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+</head>
+
+<body>
+    <script src="../../cascade-restapi.js"></script>
+    <script>
+        // think of subscribers as relationships
+        // listing the subscribers of a content type will give you pages
+        // listing the subscribers of a page will give you blocks/pages where that page is attached/linked 
+        // listing the subscribers of a block will give you blocks/pages where that block is attached
+        // listing the subscribers of a file will give you blocks/pages where that file is attached/linked 
+
+        listSubscribers({
+            type: "block",
+            id: "705473bac0a8005f5e2396ff54cefa2a", // fill in
+        }).then(function(result) {
+            console.log(result);
+            console.log(result.apiReturn.subscribers);
+            // you can see all subscribers (relationships) created by linking and/or attacheing by using dot notation to drill down to the subscribers array
+            console.log(result.apiReturn.manualSubscribers);
+            // manaul subscribers are also available 
+        }).catch(function(error) {
+            console.log(error);
+            // if you see the error "The model returned a null response." make sure the asset type is correct
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+</head>
+
+<body>
+    <script src="../../cascade-restapi.js"></script>
+    <script>
+        // asset creation requires very specific informaion
+        // most of the time it's easier and faster to make a copy of an asset and edit it
+        // very similar to how the system creates new assets from base assets
+
+        // creating a folder using parent folder ID and site name
+        // although a folder ID is provided, a site name or ID is still required
+
+        createAsset({
+            asset: {
+                folder: {
+                    name: "testing",
+                    parentFolderId: "b9b9c410c0a8002f27811f55db1fbd9f",
+                    siteName: "_fernando"
+                }
+            }
+        }).then(function(result) {
+            console.log(result);
+        }).catch(function(error) {
+            console.log(error);
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+</head>
+
+<body>
+    <script src="../../cascade-restapi.js"></script>
+    <script>
+        // you can see all the assets you can read in the operations documentaion under "ReadRequest"
+
+        // read asset using asset ID
+
+        readAsset({
+            type: "page",
+            id: "73a86c1fc0a8005f0081296adc8c9cf9", // fill in
+        }).then(function(result) {
+            console.log(result);
+            // result is the object the read function returns
+            console.log(result.apiReturn.asset.page.metadata.title);
+            // apiReturn is the read asset as object
+            // using dot notation, we drill down the object property (page XML nodes) until we reach the speicifc node (field) we want
+        }).catch(function(error) {
+            console.log(error);
+        });
+
+        // read asset using asset Path
+
+        readAsset({
+            type: "block",
+            path: "rss-example", // fill in
+            siteName: "Exchange Module - Events" // fill in
+        }).then(function(result) {
+            console.log(result);
+            // R, need an example block on new site to read specific field 
+        }).catch(function(error) {
+            console.log(error);
+        });
+
+        // there are multiple block types (FEED, INDEX, XHTML_DATADEFINITION, XML, etc) but all can be read with the type "block"
+        // in the api return, the result will specify the type of asset, including the specific block type
+    </script>
+</body>
+
+</html>

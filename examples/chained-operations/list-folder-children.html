@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+</head>
+
+<body>
+    <script src="../../cascade-restapi.js"></script>
+    <script>
+        // you can see all assets inside a folder by reading the folder
+
+        // read folder asset using asset ID
+
+        readAsset({
+            type: "folder",
+            id: "239fe422c0a8002f5c7e3354c20b184d", // fill in
+        }).then(function(result) {
+            console.log(result);
+            // result is the object the read function returns
+            var folderChildren = result.apiReturn.asset.folder.children;
+            // drill down to the array of children in the folder
+            folderChildren.forEach(function(child) {
+                // console.log(child);
+                // loop over the children
+            });
+        }).catch(function(error) {
+            console.log(error);
+        });
+
+        // read folder asset using asset ID
+
+        readAsset({
+            type: "folder",
+            path: "2024", // fill in
+            siteName: "Exchange Module - Events" // fill in
+        }).then(function(result) {
+            console.log(result);
+            // result is the object the read function returns
+            var folderChildren = result.apiReturn.asset.folder.children;
+            // drill down to the array of children in the folder
+            folderChildren.forEach(function(child) {
+                readAsset({
+                    type: child.type,
+                    id: child.id,
+                }).then(function(result) {
+                    console.log(result);
+                }).catch(function(error) {
+                    console.log(error);
+                });
+                // loop over the children and read each child
+            });
+        }).catch(function(error) {
+            console.log(error);
+        });
+    </script>
+</body>
+
+</html>
