@@ -5,40 +5,169 @@
 </head>
 
 <body>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.1.0/papaparse.min.js"></script>
     <script src="../../cascade-restapi.js"></script>
     <script>
-        // you can see all the assets you can read on the operations documentaion under "ReadRequest"
+        // creating the skeleton of new pages for a site redesign can be extremely helpful
+        // creating them manually, not so much trouble
+        // to ensure pages can be created without errors, we want to ensure the folders they have to go in already exist 
+        // its easier and faster to create all folders first before creating any pages
+        // the 2 functions below could be combined into a single, bigger, more complex function but I prefer we keep it simple
+        // like the principle... and the band!
 
-        // read asset using asset ID
+        var siteName = "CUC24-Web-Services-master"; // fill in
 
-        readAsset({
-            type: "page",
-            id: "73a86c1fc0a8005f0081296adc8c9cf9", // fill in
-        }).then(function(result) {
-            console.log(result);
-            // result is the object the read function returns
-            console.log(result.apiReturn.asset.page.metadata.title);
-            // apiReturn is the read asset as object
-            // using dot notation, we drill down the object property (page XML nodes) until we reach the speicifc node (field) we want
-        }).catch(function(error) {
-            console.log(error);
-        });
+        // createFolders();
 
-        // read asset using asset Path
+        createPages();
 
-        readAsset({
-            type: "block",
-            path: "rss-example", // fill in
-            siteName: "Exchange Module - Events" // fill in
-        }).then(function(result) {
-            console.log(result);
-            // R, need an example block on new site to read specific field 
-        }).catch(function(error) {
-            console.log(error);
-        });
+        function createFolders() {
+            // you'll want to make sure 
+            Papa.parse('csv/folders.csv', {
+                header: true,
+                download: true,
+                skipEmptyLines: true,
+                transformHeader: function(h) {
+                    return h.replace(/[\W_]+/g, "").trim();
+                },
+                complete: function(result) {
+                    console.log(result);
+                    result.data.forEach(function(f, i) {
+                        setTimeout(function() {
+                            // console.log(f);
+                            var path = f.path;
+                            var parentFolder = path.substr(0, path.lastIndexOf("/"));
+                            var folderName = path.substring(path.lastIndexOf("/") + 1);
+                            // using the path of the new folder we seperate the folder name and the parent folder of that folder
+                            // you'll want to make sure any parent folder needed for sub folders are created first by having parent folders listed before sub folders in the csv
+                            // EVEN THEN, for one reason or another, some operations finish faster then others even though they started later
+                            // a simple workaround is to add a delay to the loop
 
-        // there are multiple block types (FEED, INDEX, XHTML_DATADEFINITION, XML, etc) but all can be read with the type "block"
-        // in the api return, the result will specify the type of asset, including the specific block type
+                            // #1 first we copy
+                            copyAsset({
+                                type: "folder",
+                                path: f.baseasset,
+                                siteName: siteName,
+                                copyParameters: {
+                                    newName: folderName,
+                                    destinationContainerIdentifier: {
+                                        type: "folder",
+                                        path: {
+                                            path: parentFolder,
+                                            siteName: siteName,
+                                        }
+                                    }
+                                }
+                            }).then(function(result) {
+                                console.log(result);
+                                // #2 then we read
+                                readAsset({
+                                    type: "folder",
+                                    path: parentFolder + "/" + folderName,
+                                    siteName: siteName,
+                                    // the copy operation does NOT return a new asset ID so we use the same global vars we used to create the copy to read the copy
+                                }).then(function(result) {
+                                    console.log(result);
+                                    // #3 then we edit
+                                    result.apiReturn.asset.folder.metadata.displayName = f.displayname;
+                                    result.apiReturn.asset.folder.shouldBeIndexed = f.indexable;
+                                    result.apiReturn.asset.folder.shouldBePublished = f.publishable;
+                                    editAsset({
+                                        asset: result.apiReturn,
+                                    }).then(function(result) {
+                                        console.log(result);
+                                    }).catch(function(error) {
+                                        console.log(error);
+                                    });
+                                    // using the edit fuction, we send back the edited object 
+                                }).catch(function(error) {
+                                    console.log(error);
+                                });
+                            }).catch(function(error) {
+                                console.log(error);
+                            });
+                        }, i * 400);
+                    });
+                }
+            });
+        }
+
+        function createPages() {
+            // you'll want to make sure 
+            Papa.parse('csv/pages.csv', {
+                header: true,
+                download: true,
+                skipEmptyLines: true,
+                transformHeader: function(h) {
+                    return h.replace(/[\W_]+/g, "").trim();
+                },
+                complete: function(result) {
+                    console.log(result);
+                    result.data.forEach(function(p, i) {
+                        setTimeout(function() {
+                            // console.log(f);
+                            var path = p.path;
+                            var parentFolder = path.substr(0, path.lastIndexOf("/"));
+                            var pageName = path.substring(path.lastIndexOf("/") + 1);
+
+                            // #1 first we copy
+                            copyAsset({
+                                type: "page",
+                                path: p.baseasset,
+                                siteName: siteName,
+                                copyParameters: {
+                                    newName: pageName,
+                                    destinationContainerIdentifier: {
+                                        type: "folder",
+                                        path: {
+                                            path: parentFolder,
+                                            siteName: siteName,
+                                        }
+                                    }
+                                }
+                            }).then(function(result) {
+                                console.log(result);
+                                // #2 then we read
+                                readAsset({
+                                    type: "page",
+                                    path: parentFolder + "/" + pageName,
+                                    siteName: siteName,
+                                    // the copy operation does NOT return a new asset ID so we use the same global vars we used to create the copy to read the copy
+                                }).then(function(result) {
+                                    console.log(result);
+                                    // #3 then we edit
+                                    result.apiReturn.asset.page.shouldBePublished = p.publishable;
+                                    result.apiReturn.asset.page.shouldBeIndexed = p.indexable;
+                                    result.apiReturn.asset.page.metadata.displayName = p.displayname;
+                                    result.apiReturn.asset.page.metadata.title = p.title;
+                                    result.apiReturn.asset.page.metadata.author = p.author;
+                                    result.apiReturn.asset.page.metadata.keywords = p.keywords;
+                                    result.apiReturn.asset.page.metadata.summary = p.summary;
+                                    result.apiReturn.asset.page.metadata.metaDescription = p.description;
+                                    // result.apiReturn.asset.page.metadata.startDate = p.startDate; // required format: MMM DD, YYYY hh:mm:ss A
+                                    // result.apiReturn.asset.page.metadata.endDate = p.endDate; // required format: MMM DD, YYYY hh:mm:ss A
+                                    // result.apiReturn.asset.page.metadata.reviewDate = p.reviewDate; // required format: MMM DD, YYYY hh:mm:ss A
+                                    delete result.apiReturn.asset.page.expirationFolderId; // when replacing an asset value that has both id and path, you must delete one and replace the other
+                                    result.apiReturn.asset.page.expirationFolderPath = p.expfolderpath;
+                                    editAsset({
+                                        asset: result.apiReturn,
+                                    }).then(function(result) {
+                                        console.log(result);
+                                    }).catch(function(error) {
+                                        console.log(error);
+                                    });
+                                    // using the edit fuction, we send back the edited object 
+                                }).catch(function(error) {
+                                    console.log(error);
+                                });
+                            }).catch(function(error) {
+                                console.log(error);
+                            });
+                        }, i * 400);
+                    });
+                }
+            });
+        }
     </script>
 </body>
 

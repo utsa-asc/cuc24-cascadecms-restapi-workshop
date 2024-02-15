@@ -12,16 +12,41 @@
         // read asset using asset ID
 
         readAsset({
-            type: "page",
-            id: "73a86c1fc0a8005f0081296adc8c9cf9", // fill in
+            type: "block",
+            id: "8f75361ac0a8002f45f9e97a8a81c206", // fill in
         }).then(function(result) {
             console.log(result);
-            // lets change the title
-            result.apiReturn.asset.page.metadata.title = "NEW TITLE";
-            // using dot notation, we drill down to the node (field) we want to edit
+            // result is the object the read function returns
+            // apiReturn is the read asset as object
+            // using dot notation, we drill down the object property (page XML nodes) until we reach the speicifc node (field) we want
+            // since this is a data definition block and the fields we want to edit are data defnition fields, we want to look at the structure data nodes
+            var structuredData = result.apiReturn.asset.xhtmlDataDefinitionBlock.structuredData;
+            // dot notation can get long, especially since all data in an asset is made up of nested nodes
+            // inside of structuredData we have data definition information and nodes where the content lives 
+            // all structuredData nodes are arrays of objects, even if there's only one object at the time
+            var video = structuredData.structuredDataNodes[0];
+            // since all structuredData nodes are arrays, we need to target the first item of the array
+            // all arrays start with an index of ZERO so the first item of the array is ZERO not ONE
+            // console.log(video.identifier);
+            // here, we're inside the video structure data node, you can confirm that by outputting the node identifier
+            // inside the video node, there are 3 nodes, 1 for each field in the data definition 
+            // each node will the following properties: type, identifier, text, etc
+            // most data definition fields that take in a value will have type as text 
+            // the identifier is the ID you give the field in the data definition 
+            // the text is the actual value in the field, if the node doesn have a text property, that means the field is empty/blank            
+            var videoEyebrowText = video.structuredDataNodes[0];
+            var videoHeading = video.structuredDataNodes[1];
+            var videoYouTubeID = video.structuredDataNodes[2];
+            // split each node into its own var for easy visualization but at this time, we only want to edit the video itself
+            console.log(videoYouTubeID.text);
+            // output old videoYouTubeID
+            videoYouTubeID.text = "As8iVB3l6uA";
+            // change videoYouTubeID
             // as an object property, it's value can be replaced 
             // now the whole object is updated
-
+            // result.apiReturn.asset.xhtmlDataDefinitionBlock.structuredData.structuredDataNodes[0].structuredDataNodes[2].text = "As8iVB3l6uA";
+            // this could also be done without defining multiple node vars
+            // the array positions [] are great for data definitions that don't have any repeatable groups/feilds 
             editAsset({
                 asset: result.apiReturn,
             }).then(function(result) {

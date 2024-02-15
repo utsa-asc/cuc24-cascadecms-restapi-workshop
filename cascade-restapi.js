@@ -22,9 +22,9 @@ function readAsset(a) {
             .then((r) => r.json())
             .then((data) => {
                 if (data.success) {
-                    resolve({ status: "Success", sent: a, apiReturn: data, url: url });
+                    resolve({ read_status: "Success", sent: a, apiReturn: data, url: url });
                 } else {
-                    reject({ status: "Error", error: data.message, sent: a, apiReturn: data, url: url });
+                    reject({ read_status: "Error", error: data.message, sent: a, apiReturn: data, url: url });
                 }
             });
     });
@@ -36,9 +36,9 @@ function editAsset(a) {
             .then((r) => r.json())
             .then((data) => {
                 if (data.success) {
-                    resolve({ status: "Success", sent: a, apiReturn: data });
+                    resolve({ edit_status: "Success", sent: a, apiReturn: data });
                 } else {
-                    reject({ status: "Error", error: data.message, sent: a, apiReturn: data });
+                    reject({ edit_status: "Error", error: data.message, sent: a, apiReturn: data });
                 }
             });
     });
@@ -46,7 +46,7 @@ function editAsset(a) {
 
 function copyAsset(a) {
     if (a.path) {
-        var url = cmsUrl + "api/v1/copy/" + a.type + "/" + a.siteNameName + "/" + a.path;
+        var url = cmsUrl + "api/v1/copy/" + a.type + "/" + a.siteName + "/" + a.path;
     } else if (a.id) {
         var url = cmsUrl + "api/v1/copy/" + a.type + "/" + a.id;
     }
@@ -56,9 +56,9 @@ function copyAsset(a) {
             .then((r) => r.json())
             .then((data) => {
                 if (data.success) {
-                    resolve({ status: "Success", sent: a, apiReturn: data });
+                    resolve({ copy_status: "Success", sent: a, apiReturn: data, url: url });
                 } else {
-                    reject({ status: "Error", error: data.message, sent: a, apiReturn: data });
+                    reject({ copy_status: "Error", error: data.message, sent: a, apiReturn: data, url: url });
                 }
             });
     });
@@ -66,7 +66,7 @@ function copyAsset(a) {
 
 function moveAsset(a) {
     if (a.path) {
-        var url = cmsUrl + "api/v1/move/" + a.type + "/" + a.siteNameName + "/" + a.path;
+        var url = cmsUrl + "api/v1/move/" + a.type + "/" + a.siteName + "/" + a.path;
     } else if (a.id) {
         var url = cmsUrl + "api/v1/move/" + a.type + "/" + a.id;
     }
@@ -76,9 +76,9 @@ function moveAsset(a) {
             .then((r) => r.json())
             .then((data) => {
                 if (data.success) {
-                    resolve({ status: "Success", sent: a, apiReturn: data });
+                    resolve({ move_status: "Success", sent: a, apiReturn: data, url: url });
                 } else {
-                    reject({ status: "Error", error: data.message, sent: a, apiReturn: data });
+                    reject({ move_status: "Error", error: data.message, sent: a, apiReturn: data, url: url });
                 }
             });
     });
@@ -86,7 +86,7 @@ function moveAsset(a) {
 
 function deleteAsset(a) {
     if (a.path) {
-        var url = cmsUrl + "api/v1/delete/" + a.type + "/" + a.siteNameName + "/" + a.path;
+        var url = cmsUrl + "api/v1/delete/" + a.type + "/" + a.siteName + "/" + a.path;
     } else if (a.id) {
         var url = cmsUrl + "api/v1/delete/" + a.type + "/" + a.id;
     }
@@ -96,9 +96,9 @@ function deleteAsset(a) {
             .then((r) => r.json())
             .then((data) => {
                 if (data.success) {
-                    resolve({ status: "Success", sent: a, apiReturn: data });
+                    resolve({ delete_status: "Success", sent: a, apiReturn: data, url: url });
                 } else {
-                    reject({ status: "Error", error: data.message, sent: a, apiReturn: data });
+                    reject({ delete_status: "Error", error: data.message, sent: a, apiReturn: data, url: url });
                 }
             });
     });
@@ -110,9 +110,9 @@ function createAsset(a) {
             .then((r) => r.json())
             .then((data) => {
                 if (data.success) {
-                    resolve({ status: "Success", sent: a, apiReturn: data });
+                    resolve({ create_status: "Success", sent: a, apiReturn: data });
                 } else {
-                    reject({ status: "Error", error: data.message, sent: a, apiReturn: data });
+                    reject({ create_status: "Error", error: data.message, sent: a, apiReturn: data });
                 }
             });
     });
@@ -133,9 +133,9 @@ function listSubscribers(a) {
             .then((r) => r.json())
             .then((data) => {
                 if (data.success) {
-                    resolve({ status: "Success", sent: a, apiReturn: data, url: url });
+                    resolve({ listSubscribers_status: "Success", sent: a, apiReturn: data, url: url });
                 } else {
-                    reject({ status: "Error", error: data.message, sent: a, apiReturn: data, url: url });
+                    reject({ listSubscribers_status: "Error", error: data.message, sent: a, apiReturn: data, url: url });
                 }
             });
     });
@@ -147,9 +147,9 @@ function listSites(a) {
             .then((r) => r.json())
             .then((data) => {
                 if (data.success) {
-                    resolve({ status: "Success", sent: a, apiReturn: data });
+                    resolve({ listSites_status: "Success", sent: a, apiReturn: data });
                 } else {
-                    reject({ status: "Error", error: data.message, sent: a, apiReturn: data });
+                    reject({ listSites_status: "Error", error: data.message, sent: a, apiReturn: data });
                 }
             });
     });
