@@ -38,7 +38,7 @@
                             var path = f.path;
                             var parentFolder = path.substr(0, path.lastIndexOf("/"));
                             var folderName = path.substring(path.lastIndexOf("/") + 1);
-                            // using the path of the new folder we seperate the folder name and the parent folder of that folder
+                            // using the path of the new folder we separate the folder name and the parent folder of that folder
                             // you'll want to make sure any parent folder needed for sub folders are created first by having parent folders listed before sub folders in the csv
                             // EVEN THEN, for one reason or another, some operations finish faster then others even though they started later
                             // a simple workaround is to add a delay to the loop
@@ -79,7 +79,7 @@
                                     }).catch(function(error) {
                                         console.log(error);
                                     });
-                                    // using the edit fuction, we send back the edited object 
+                                    // using the edit function, we send back the edited object 
                                 }).catch(function(error) {
                                     console.log(error);
                                 });
@@ -156,7 +156,7 @@
                                     }).catch(function(error) {
                                         console.log(error);
                                     });
-                                    // using the edit fuction, we send back the edited object 
+                                    // using the edit function, we send back the edited object 
                                 }).catch(function(error) {
                                     console.log(error);
                                 });
