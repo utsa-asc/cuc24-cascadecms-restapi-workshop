@@ -2,7 +2,7 @@
 const cmsUrl = "https://workshops.cascadecms.com/";
 /* Step 2: Create and add your cascade API Key. */
 // Note: Additional details on API Setup found here- https://www.hannonhill.com/cascadecms/latest/cascade-basics/account-settings.html#APIKey*/
-const cmsAPI = "abca1397-987d-41cb-86c9-8cfd57a49d1a";
+const cmsAPI = "#####-###########-############-########";
 /* Step 3: Save */
 
 const headers = { "Authorization": "Bearer " + cmsAPI };
