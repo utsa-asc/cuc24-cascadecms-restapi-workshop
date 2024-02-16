@@ -7,32 +7,45 @@
 <body>
     <script src="../../cascade-restapi.js"></script>
     <script>
-        // to delete an asset, you have to provide the current asset's type, path/id, new asset name and folder information
+        // Note: To delete an asset, you have to provide the current asset's type, path/id, new asset name and folder information
 
-        // delete asset using asset ID 
-        // deleting using the asset ID will check if already deleted and found in Recycle Bin
+        /* Exercise 1: Delete asset using asset ID  */
+
+        // Note: Deleting using the asset ID will check if already deleted and found in Recycle Bin
+
+        /* Step 1.1: Add the page ID you created from the prior copy operation on line X */
+        /* Step 1.2: Save, open file in browser, view console log */
 
         deleteAsset({
             type: "page",
-            id: "9f224139c0a8002f45f9e97a68c3bd07", // fill in
+            id: "", // fill in
         }).then(function(result) {
             console.log(result);
         }).catch(function(error) {
             console.log(error);
         });
 
-        // delete asset using asset path
-        // deleting using the asset path will check if path exists before attempting to delete
+        
+        /* Exercise 2: Delete asset using asset path */
 
-        deleteAsset({
-            type: "page",
-            path: "/dir4/page", // fill in
-            siteName: "_fernando", // fill in
-        }).then(function(result) {
-            console.log(result);
-        }).catch(function(error) {
-            console.log(error);
-        });
+        // Note: Deleting using the asset path will check if path exists before attempting to delete
+
+        /* Step 2.1: Comment out Exercise 1 above from lines X */
+        /* Step 2.2: Uncomment out Exercise 2 below from lines X */
+        /* Step 2.3: Locate the "jan-thomas" testimonial block in the block folder and add the path on line X */
+        /* Step 2.4: Add your site name name on line X */
+        /* Step 2.5: Save, view console log, refresh browser */
+
+       
+        // deleteAsset({
+        //     type: "block",
+        //     path: "", // fill in
+        //     siteName: "", // fill in
+        // }).then(function(result) {
+        //     console.log(result);
+        // }).catch(function(error) {
+        //     console.log(error);
+        // });
     </script>
 </body>
 

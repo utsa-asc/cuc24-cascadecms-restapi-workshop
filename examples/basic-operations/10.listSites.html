@@ -7,13 +7,17 @@
 <body>
     <script src="../../cascade-restapi.js"></script>
     <script>
-        // this will list all sites you can read in the CMS
+        
+        /* Exercise 1: List all sites you can read in the CMS  */
+        
+        /* Step 1.1: Open file in browser and view console log */
 
         listSites({}).then(function(result) {
             console.log(result);
         }).catch(function(error) {
             console.log(error);
         });
+
     </script>
 </body>
 

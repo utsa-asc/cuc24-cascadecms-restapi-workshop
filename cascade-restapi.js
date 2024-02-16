@@ -1,7 +1,9 @@
-const cmsUrl = "https://yourOrg.cascadecms.com/";
-const cmsAPI = "xxxxxxxxx-xx-xxxx-xxxx";
-
-
+/* Step 1: Add the workshop cms URL*/
+const cmsUrl = "https://workshops.cascadecms.com/";
+/* Step 2: Create and add your cascade API Key. */
+// Note: Additional details on API Setup found here- https://www.hannonhill.com/cascadecms/latest/cascade-basics/account-settings.html#APIKey*/
+const cmsAPI = "####-###-#####";
+/* Step 3: Save */
 
 const headers = { "Authorization": "Bearer " + cmsAPI };
 

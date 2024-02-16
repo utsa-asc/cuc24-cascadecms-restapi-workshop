@@ -7,49 +7,61 @@
 <body>
     <script src="../../cascade-restapi.js"></script>
     <script>
-        // to copy an asset, you have to provide the current asset's type, path/id, new asset name and folder information
+        // Note: To copy an asset, you have to provide the current asset's type, path/id, new asset name and folder information
 
-        // copy asset using asset ID and folder ID
+        /* Exercise 1: Copy asset using asset ID and folder ID */
+
+        /* Step 1.1: Add a page ID to copy from your site on line X */
+        /* Step 1.2: Add a system name for your new page on line X */
+        /* Step 1.3: Add a destination folder ID from your site for where your page should be copied to on line X */
+        /* Step 1.4: Save, open file in browser, view console log */
 
         copyAsset({
             type: "page",
-            id: "73a86c1fc0a8005f0081296adc8c9cf9", // fill in
+            id: "", // fill in
             copyParameters: {
-                newName: "test-new-page", // fill in
+                newName: "", // fill in
                 destinationContainerIdentifier: {
                     type: "folder",
-                    id: "73a86953c0a8005f0081296abcb95309" // fill in
+                    id: "" // fill in
                 }
             }
         }).then(function(result) {
             console.log(result);
         }).catch(function(error) {
             console.log(error);
-            // the error "The validated expression is false" usually means the new asset name does NOT meet the naming convention requirements and/or contains an illegal character
+            // Note: The error "The validated expression is false" usually means the new asset name does NOT meet the naming convention requirements and/or contains an illegal character
         });
 
-        // copy asset using asset path and folder path
+        /* Exercise 2: Copy asset using asset path and folder path */
 
-        copyAsset({
-            type: "page",
-            path: "recurring/example-4", // fill in
-            siteName: "Exchange Module - Events", // fill in
-            copyParameters: {
-                newName: "example-42222", // fill in
-                destinationContainerIdentifier: {
-                    type: "folder",
-                    path: {
-                        path: "recurring", // fill in
-                        siteName: "Exchange Module - Events", // fill in
-                    }
-                }
-            }
-            // folder information is required even if the copy should go in the same folder as the original asset
-        }).then(function(result) {
-            console.log(result);
-        }).catch(function(error) {
-            console.log(error);
-        });
+        /* Step 2.1: Comment out Exercise 1 above from lines X */
+        /* Step 2.2: Uncomment out Exercise 2 below from lines X */
+        /* Step 2.3: Add a page path to copy and your site name on line X */
+        /* Step 2.4: Add a system name for your new page on line X */
+        /* Step 2.5: Add a destination folder path and your site name for where your page should be copied to on line X */
+        /* Step 2.6: Save, view console log, refresh browser */
+
+        // copyAsset({
+        //     type: "page",
+        //     path: "", // fill in
+        //     siteName: "", // fill in
+        //     copyParameters: {
+        //         newName: "", // fill in
+        //         destinationContainerIdentifier: {
+        //             type: "folder",
+        //             path: {
+        //                 path: "", // fill in
+        //                 siteName: "", // fill in
+        //             }
+        //         }
+        //     }
+        //     // // Note: Folder information is required even if the copy should go in the same folder as the original asset
+        // }).then(function(result) {
+        //     console.log(result);
+        // }).catch(function(error) {
+        //     console.log(error);
+        // });
     </script>
 </body>
 

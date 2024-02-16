@@ -8,11 +8,18 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.1.0/papaparse.min.js"></script>
     <script src="../../cascade-restapi.js"></script>
     <script>
+        /* Exercise 1: Automate creating multiple program blocks by reading from csv file (/workshop-scripts/csv/programs.csv) */
+
+        /* Step 1.1: Locate the program block base asset (/_cms/base-assets/blocks/program) and add the asset ID */
+        /* Step 1.2: Add the program block folder path (in the block folder) which will be where our new blocks will be created */
+        /* Step 1.3: Add the program block site name  */
+        /* Step 1.4: Follow instructor's demonstration as the script is reviewed */
+        
         var baseAssetID = "90008e76c0a8002f45f9e97a7a71ccd4"; // fill in
         var programFolderPath = "blocks/program"; // fill in
         var programSiteName = "CUC24-Web-Services-master"; // fill in
 
-        // Papa Parse is a free JS library that makes reading CSV files super easy
+        // Note: Papa Parse is a free JS library that makes reading CSV files super easy
         // https://www.papaparse.com
 
         Papa.parse('csv/programs.csv', {
@@ -30,15 +37,15 @@
 
         function importPrograms(data) {
             data.forEach(function(p) {
-                // loop over the programs
+                //Note: loop over the programs
 
                 // console.log(p);
-                // output each program as an object
+                // Note: output each program as an object
 
                 var newBlockName = p.systemname;
-                // csv file provides system name for program block 
+                // Note: csv file provides system name for program block 
 
-                // copy block using asset path and folder path defined above
+                // Note: copy block using asset path and folder path defined above
                 // #1 first we copy
                 copyAsset({
                     type: "block",
@@ -60,7 +67,7 @@
                         type: "block",
                         path: programFolderPath + "/" + newBlockName,
                         siteName: programSiteName,
-                        // the copy operation does NOT return a new asset ID so we use the same global vars we used to create the copy to read the copy
+                        // Note: the copy operation does NOT return a new asset ID so we use the same global vars we used to create the copy to read the copy
                     }).then(function(result) {
                         console.log(result);
                         var program = result.apiReturn.asset.xhtmlDataDefinitionBlock.structuredData.structuredDataNodes[0].structuredDataNodes;
@@ -70,12 +77,12 @@
                         program[3].text = p.location; // location
                         program[4].text = p.completionTime; // completionTime
                         program[5].filePath = p.img; // image
-                        // the file path of the image is provided in CSV so we can use that
+                        // Note: the file path of the image is provided in CSV so we can use that
                         // the file ID could also be used 
-                        // on edit, the filepath is verfified and the image is attached to the block
+                        // on edit, the filepath is verified and the image is attached to the block
                         // if the file cannot be found, the edit will return an error and not save
                         program[6].text = p.alt; // image alt
-                        // update the program fields
+                        // Note: update the program fields
                         editAsset({
                             asset: result.apiReturn,
                         }).then(function(result) {
@@ -83,7 +90,7 @@
                         }).catch(function(error) {
                             console.log(error);
                         });
-                        // using the edit fuction, we send back the edited object 
+                        // Note: using the edit function, we send back the edited object 
                     }).catch(function(error) {
                         console.log(error);
                     });
@@ -91,7 +98,7 @@
                     console.log(error);
                 });
                 // console.log("----");
-                // // a separator to make the log easy to read
+                // Note: a separator to make the log easy to read
             });
         }
     </script>
