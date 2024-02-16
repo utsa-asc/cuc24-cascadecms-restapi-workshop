@@ -2,7 +2,7 @@
 const cmsUrl = "https://workshops.cascadecms.com/";
 /* Step 2: Create and add your cascade API Key. */
 // Note: Additional details on API Setup found here- https://www.hannonhill.com/cascadecms/latest/cascade-basics/account-settings.html#APIKey*/
-const cmsAPI = "####-###-#####";
+const cmsAPI = "######-########-#######-###";
 /* Step 3: Save */
 
 const headers = { "Authorization": "Bearer " + cmsAPI };
@@ -152,6 +152,20 @@ function listSites(a) {
                     resolve({ listSites_status: "Success", sent: a, apiReturn: data });
                 } else {
                     reject({ listSites_status: "Error", error: data.message, sent: a, apiReturn: data });
+                }
+            });
+    });
+}
+
+function copySite(a) {
+    return new Promise(function(resolve, reject) {
+        fetch(cmsUrl + "api/v1/siteCopy", { method: "POST", headers: headers, body: JSON.stringify(a), })
+            .then((r) => r.json())
+            .then((data) => {
+                if (data.success) {
+                    resolve({ edit_status: "Success", sent: a, apiReturn: data });
+                } else {
+                    reject({ edit_status: "Error", error: data.message, sent: a, apiReturn: data });
                 }
             });
     });
