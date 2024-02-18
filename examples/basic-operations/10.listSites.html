@@ -11,24 +11,23 @@
 
         /* Step 1.1: Open file in browser and view console log */
 
-        listSites({}).then(function(result) {
+        listSites({}).then(function (result) {
             console.log(result);
             var sites = result.apiReturn.sites;
-            sites.forEach(function(site) {
-                // Note: loop over the sites
-                // read each site
+            sites.forEach(function (site) {
+                // Note: loop over the sites and read each site
                 readAsset({
                     type: "site",
                     id: site.id,
-                }).then(function(result) {
+                }).then(function (result) {
                     console.log(result);
                     // Note: result is the object the read function returns
-                }).catch(function(error) {
+                }).catch(function (error) {
                     console.log(error);
                 });
 
             });
-        }).catch(function(error) {
+        }).catch(function (error) {
             console.log(error);
         });
     </script>

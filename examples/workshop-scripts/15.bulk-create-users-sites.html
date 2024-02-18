@@ -8,6 +8,10 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.1.0/papaparse.min.js"></script>
     <script src="../../cascade-restapi.js"></script>
     <script>
+
+        /* Note: Bonus script - This script automates the creation of Cascade users by reading in list from CSV file (users.csv),
+          creating individual sites and updating site access for each user.  */
+
         // createUsers();
 
         // createSites();
@@ -19,12 +23,12 @@
                 header: true,
                 download: true,
                 skipEmptyLines: true,
-                transformHeader: function(h) {
+                transformHeader: function (h) {
                     return h.toLowerCase().replace(/[\W_]+/g, "").trim();
                 },
-                complete: function(result) {
+                complete: function (result) {
                     console.log(result);
-                    result.data.forEach(function(user) {
+                    result.data.forEach(function (user) {
                         console.log(user);
                         createAsset({
                             asset: {
@@ -39,9 +43,9 @@
                                     username: user.email,
                                 }
                             }
-                        }).then(function(result) {
+                        }).then(function (result) {
                             console.log(result);
-                        }).catch(function(error) {
+                        }).catch(function (error) {
                             console.log(error);
                         });
                     });
@@ -54,19 +58,19 @@
                 header: true,
                 download: true,
                 skipEmptyLines: true,
-                transformHeader: function(h) {
+                transformHeader: function (h) {
                     return h.toLowerCase().replace(/[\W_]+/g, "").trim();
                 },
-                complete: function(result) {
+                complete: function (result) {
                     console.log(result);
-                    result.data.forEach(function(user) {
+                    result.data.forEach(function (user) {
                         console.log(user);
                         copySite({
                             originalSiteName: "_WS-Master",
                             newSiteName: "WS-" + user.lastname
-                        }).then(function(result) {
+                        }).then(function (result) {
                             console.log(result);
-                        }).catch(function(error) {
+                        }).catch(function (error) {
                             console.log(error);
                         });
                     });
@@ -79,18 +83,18 @@
                 header: true,
                 download: true,
                 skipEmptyLines: true,
-                transformHeader: function(h) {
+                transformHeader: function (h) {
                     return h.toLowerCase().replace(/[\W_]+/g, "").trim();
                 },
-                complete: function(result) {
+                complete: function (result) {
                     console.log(result);
-                    result.data.forEach(function(user) {
+                    result.data.forEach(function (user) {
                         console.log(user);
                         readAsset({
                             type: "site",
                             siteName: "%2520", // have to double escape the site name to read Site by name instead of ID
                             path: "WS-" + user.lastname
-                        }).then(function(result) {
+                        }).then(function (result) {
                             console.log(result);
                             result.apiReturn.asset.site.roleAssignments = [{
                                 "roleId": "8",
@@ -100,13 +104,13 @@
 
                             editAsset({
                                 asset: result.apiReturn,
-                            }).then(function(result) {
+                            }).then(function (result) {
                                 console.log(result);
-                            }).catch(function(error) {
+                            }).catch(function (error) {
                                 console.log(error);
                             });
 
-                        }).catch(function(error) {
+                        }).catch(function (error) {
                             console.log(error);
                         });
                     });
