@@ -16,7 +16,9 @@
 
         // createSites();
 
-        // updateSiteAccess()
+        // updateSiteAccess();
+
+        // copyDownloadZip();
 
         function createUsers() {
             Papa.parse('csv/users.csv', {
@@ -116,6 +118,42 @@
                     });
                 }
             });
+        }
+
+        function copyDownloadZip() {
+            Papa.parse('csv/users2.csv', {
+                header: true,
+                download: true,
+                skipEmptyLines: true,
+                transformHeader: function (h) {
+                    return h.toLowerCase().replace(/[\W_]+/g, "").trim();
+                },
+                complete: function (result) {
+                    console.log(result);
+                    result.data.forEach(function (user) {
+                        console.log(user);
+                        copyAsset({
+                            type: "file",
+                            id: "c3445bb30a0000c94610aa4f7127cc49",
+                            copyParameters: {
+                                newName: "cuc24-cascadecms-restapi-workshop-main.zip",
+                                destinationContainerIdentifier: {
+                                    type: "folder",
+                                    path: {
+                                        path: "/",
+                                        siteName: "WS-" + user.lastname
+                                    }
+                                }
+                            }
+                        }).then(function (result) {
+                            console.log(result);
+                        }).catch(function (error) {
+                            console.log(error);
+                        });
+                    });
+                }
+            });
+
         }
     </script>
 </body>
