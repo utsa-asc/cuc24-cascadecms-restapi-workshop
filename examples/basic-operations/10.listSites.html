@@ -16,6 +16,7 @@
             var sites = result.apiReturn.sites;
             sites.forEach(function (site) {
                 // Note: loop over the sites and read each site
+                // console.log(site);
                 readAsset({
                     type: "site",
                     id: site.id,

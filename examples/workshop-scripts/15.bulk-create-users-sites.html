@@ -5,6 +5,10 @@
 </head>
 
 <body>
+    <script>
+        const cmsUrl = "https://workshops.cascadecms.com/";
+        const cmsAPI = "4454e28a-af16-4185-b6ad-dabe7c3e8b60";
+    </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.1.0/papaparse.min.js"></script>
     <script src="../../cascade-restapi.js"></script>
     <script>
@@ -18,10 +22,8 @@
 
         // updateSiteAccess();
 
-        // copyDownloadZip();
-
         function createUsers() {
-            Papa.parse('csv/users.csv', {
+            Papa.parse('csv/users2.csv', {
                 header: true,
                 download: true,
                 skipEmptyLines: true,
@@ -30,33 +32,35 @@
                 },
                 complete: function (result) {
                     console.log(result);
-                    result.data.forEach(function (user) {
-                        console.log(user);
-                        createAsset({
-                            asset: {
-                                user: {
-                                    authType: "normal",
-                                    email: user.email,
-                                    enabled: true,
-                                    fullName: user.firstname + ' ' + user.lastname,
-                                    groups: "Web Services",
-                                    password: "cuc24-webservices",
-                                    roles: "Contributor",
-                                    username: user.email,
+                    result.data.forEach(function (user, i) {
+                        setTimeout(function () {
+                            console.log(user);
+                            createAsset({
+                                asset: {
+                                    user: {
+                                        authType: "normal",
+                                        email: user.email.toLowerCase(),
+                                        enabled: true,
+                                        fullName: user.firstname + ' ' + user.lastname,
+                                        groups: "Web Services",
+                                        password: "cuc24-webservices",
+                                        roles: "Contributor",
+                                        username: user.email.toLowerCase(),
+                                    }
                                 }
-                            }
-                        }).then(function (result) {
-                            console.log(result);
-                        }).catch(function (error) {
-                            console.log(error);
-                        });
+                            }).then(function (result) {
+                                console.log(result);
+                            }).catch(function (error) {
+                                console.log(error);
+                            });
+                        }, i * 400);
                     });
                 }
             });
         }
 
         function createSites() {
-            Papa.parse('csv/users.csv', {
+            Papa.parse('csv/users2.csv', {
                 header: true,
                 download: true,
                 skipEmptyLines: true,
@@ -81,7 +85,7 @@
         }
 
         function updateSiteAccess() {
-            Papa.parse('csv/users.csv', {
+            Papa.parse('csv/users2.csv', {
                 header: true,
                 download: true,
                 skipEmptyLines: true,
@@ -101,7 +105,7 @@
                             result.apiReturn.asset.site.roleAssignments = [{
                                 "roleId": "8",
                                 "roleName": "Site Administrator",
-                                "users": user.email
+                                "users": user.email.toLowerCase(),
                             }]
 
                             editAsset({
@@ -120,41 +124,6 @@
             });
         }
 
-        function copyDownloadZip() {
-            Papa.parse('csv/users2.csv', {
-                header: true,
-                download: true,
-                skipEmptyLines: true,
-                transformHeader: function (h) {
-                    return h.toLowerCase().replace(/[\W_]+/g, "").trim();
-                },
-                complete: function (result) {
-                    console.log(result);
-                    result.data.forEach(function (user) {
-                        console.log(user);
-                        copyAsset({
-                            type: "file",
-                            id: "c3445bb30a0000c94610aa4f7127cc49",
-                            copyParameters: {
-                                newName: "cuc24-cascadecms-restapi-workshop-main.zip",
-                                destinationContainerIdentifier: {
-                                    type: "folder",
-                                    path: {
-                                        path: "/",
-                                        siteName: "WS-" + user.lastname
-                                    }
-                                }
-                            }
-                        }).then(function (result) {
-                            console.log(result);
-                        }).catch(function (error) {
-                            console.log(error);
-                        });
-                    });
-                }
-            });
-
-        }
     </script>
 </body>
 

@@ -14,21 +14,21 @@
         /* Step 1.1: Add a folder ID on line 19 */
         /* Step 1.2: Save, open file in browser, view console log */
 
-        readAsset({
-            type: "folder",
-            id: "", // fill in
-        }).then(function(result) {
-            console.log(result);
-            // Note: result is the object the read function returns
-            var folderChildren = result.apiReturn.asset.folder.children;
-            // Note: drill down to the array of children in the folder
-            folderChildren.forEach(function(child) {
-                console.log(child);
-                // Note: loop over the children
-            });
-        }).catch(function(error) {
-            console.log(error);
-        });
+        // readAsset({
+        //     type: "folder",
+        //     id: "aeeb4ab70a0000c954bf546717f2b37a", // fill in
+        // }).then(function (result) {
+        //     console.log(result);
+        //     // Note: result is the object the read function returns
+        //     var folderChildren = result.apiReturn.asset.folder.children;
+        //     // Note: drill down to the array of children in the folder
+        //     folderChildren.forEach(function (child) {
+        //         console.log(child);
+        //         // Note: loop over the children
+        //     });
+        // }).catch(function (error) {
+        //     console.log(error);
+        // });
 
         /* Exercise 2: Read folder asset using asset asset path */
 
@@ -37,29 +37,30 @@
         /* Step 2.3: Add a folder path and your site name on lines 42/43
         /* Step 2.5: Save, view console log, refresh browser */
 
-        // readAsset({
-        //     type: "folder",
-        //     path: "", // fill in
-        //     siteName: "" // fill in
-        // }).then(function(result) {
-        //     console.log(result);
-        //     // Note: result is the object the read function returns
-        //     var folderChildren = result.apiReturn.asset.folder.children;
-        //     // Note: drill down to the array of children in the folder
-        //     folderChildren.forEach(function(child) {
-        //         readAsset({
-        //             type: child.type,
-        //             id: child.id,
-        //         }).then(function(result) {
-        //             console.log(result);
-        //         }).catch(function(error) {
-        //             console.log(error);
-        //         });
-        //         // Note: loop over the children and read each child
-        //     });
-        // }).catch(function(error) {
-        //     console.log(error);
-        // });
+        readAsset({
+            type: "folder",
+            path: "%252F", // fill in
+            siteName: "_WS-Master" // fill in
+        }).then(function (result) {
+            console.log(result);
+            // // // Note: result is the object the read function returns
+            var folderChildren = result.apiReturn.asset.folder.children;
+            // // // Note: drill down to the array of children in the folder
+            folderChildren.forEach(function (child) {
+                // console.log(child);
+                readAsset({
+                    type: child.type,
+                    id: child.id,
+                }).then(function (result) {
+                    console.log(result);
+                }).catch(function (error) {
+                    console.log(error);
+                });
+                // Note: loop over the children and read each child
+            });
+        }).catch(function (error) {
+            console.log(error);
+        });
     </script>
 </body>
 

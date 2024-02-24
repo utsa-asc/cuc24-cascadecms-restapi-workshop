@@ -1,8 +1,9 @@
 /* Step 1: Add the workshop cms URL*/
-const cmsUrl = "https://workshops.cascadecms.com/";
+// const cmsUrl = "https://workshops.cascadecms.com/";
+// const cmsUrl = "https://unk.cascadecms.com/";
 /* Step 2: Create and add your cascade API Key. */
 // Note: Additional details on API Setup found here- https://www.hannonhill.com/cascadecms/latest/cascade-basics/account-settings.html#APIKey*/
-const cmsAPI = "";
+// const cmsAPI = "e540eb9d-c641-415b-aa1f-6671982c08dd";
 // Note: If you get the error "The requested asset does not exist" and you're not trying to access an existing asset, please double check your API Key.
 /* Step 3: Save */
 
@@ -167,6 +168,43 @@ function copySite(a) {
                     resolve({ edit_status: "Success", sent: a, apiReturn: data });
                 } else {
                     reject({ edit_status: "Error", error: data.message, sent: a, apiReturn: data });
+                }
+            });
+    });
+}
+
+function search(a){
+    return new Promise(function(resolve, reject) {
+        fetch(cmsUrl + "api/v1/search", { method: "POST", headers: headers, body: JSON.stringify({ searchInformation: a.searchInformation}), })
+            .then((r) => r.json())
+            .then((data) => {
+                if (data.success) {
+                    resolve({ search_status: "Success", sent: a, apiReturn: data });
+                } else {
+                    reject({ search_status: "Error", error: data.message, sent: a, apiReturn: data });
+                }
+            });
+    });
+}
+
+function publishAsset(a){
+    if (a.path) {
+        var url = cmsUrl + "api/v1/publish/" + a.type + "/" + a.siteName + "/" + a.path;
+    } else if (a.id) {
+        var url = cmsUrl + "api/v1/publish/" + a.type + "/" + a.id;
+    }
+    url = url.replace(/\\\\/g, "\\");
+    if (a.debug) {
+        console.log("Fetch URL " + url);
+    }
+    return new Promise(function(resolve, reject) {
+        fetch(url, { method: "POST", headers: headers, body: JSON.stringify({ publishInformation: a.publishInformation}), })
+            .then((r) => r.json())
+            .then((data) => {
+                if (data.success) {
+                    resolve({ read_status: "Success", sent: a, apiReturn: data, url: url });
+                } else {
+                    reject({ read_status: "Error", error: data.message, sent: a, apiReturn: data, url: url });
                 }
             });
     });

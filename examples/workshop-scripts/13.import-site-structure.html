@@ -23,11 +23,11 @@
            pages to populate in the folders in the Redesign folder on your site */
 
 
-        var siteName = ""; // fill in
+        var siteName = "_WS-Master"; // fill in
 
         // createFolders();
 
-        // createPages();
+        createPages();
 
         function createFolders() {
             // Note: you'll want to make sure 
@@ -35,13 +35,13 @@
                 header: true,
                 download: true,
                 skipEmptyLines: true,
-                transformHeader: function(h) {
+                transformHeader: function (h) {
                     return h.replace(/[\W_]+/g, "").trim();
                 },
-                complete: function(result) {
+                complete: function (result) {
                     console.log(result);
-                    result.data.forEach(function(f, i) {
-                        setTimeout(function() {
+                    result.data.forEach(function (f, i) {
+                        setTimeout(function () {
                             // console.log(f);
                             var path = f.path;
                             var parentFolder = path.substr(0, path.lastIndexOf("/"));
@@ -66,7 +66,7 @@
                                         }
                                     }
                                 }
-                            }).then(function(result) {
+                            }).then(function (result) {
                                 console.log(result);
                                 // #2 then we read
                                 readAsset({
@@ -74,7 +74,7 @@
                                     path: parentFolder + "/" + folderName,
                                     siteName: siteName,
                                     // Note: the copy operation does NOT return a new asset ID so we use the same global vars we used to create the copy to read the copy
-                                }).then(function(result) {
+                                }).then(function (result) {
                                     console.log(result);
                                     // #3 then we edit
                                     result.apiReturn.asset.folder.metadata.displayName = f.displayname;
@@ -82,16 +82,16 @@
                                     result.apiReturn.asset.folder.shouldBePublished = f.publishable;
                                     editAsset({
                                         asset: result.apiReturn,
-                                    }).then(function(result) {
+                                    }).then(function (result) {
                                         console.log(result);
-                                    }).catch(function(error) {
+                                    }).catch(function (error) {
                                         console.log(error);
                                     });
                                     // Note: using the edit function, we send back the edited object 
-                                }).catch(function(error) {
+                                }).catch(function (error) {
                                     console.log(error);
                                 });
-                            }).catch(function(error) {
+                            }).catch(function (error) {
                                 console.log(error);
                             });
                         }, i * 400);
@@ -106,13 +106,13 @@
                 header: true,
                 download: true,
                 skipEmptyLines: true,
-                transformHeader: function(h) {
+                transformHeader: function (h) {
                     return h.replace(/[\W_]+/g, "").trim();
                 },
-                complete: function(result) {
+                complete: function (result) {
                     console.log(result);
-                    result.data.forEach(function(p, i) {
-                        setTimeout(function() {
+                    result.data.forEach(function (p, i) {
+                        setTimeout(function () {
                             // console.log(p);
                             var path = p.path;
                             var parentFolder = path.substr(0, path.lastIndexOf("/"));
@@ -133,7 +133,7 @@
                                         }
                                     }
                                 }
-                            }).then(function(result) {
+                            }).then(function (result) {
                                 console.log(result);
                                 // #2 then we read
                                 readAsset({
@@ -141,7 +141,7 @@
                                     path: parentFolder + "/" + pageName,
                                     siteName: siteName,
                                     // Note: the copy operation does NOT return a new asset ID so we use the same global vars we used to create the copy to read the copy
-                                }).then(function(result) {
+                                }).then(function (result) {
                                     console.log(result);
                                     // #3 then we edit
                                     result.apiReturn.asset.page.shouldBePublished = p.publishable;
@@ -159,16 +159,16 @@
                                     result.apiReturn.asset.page.expirationFolderPath = p.expfolderpath;
                                     editAsset({
                                         asset: result.apiReturn,
-                                    }).then(function(result) {
+                                    }).then(function (result) {
                                         console.log(result);
-                                    }).catch(function(error) {
+                                    }).catch(function (error) {
                                         console.log(error);
                                     });
                                     // Note: using the edit function, we send back the edited object 
-                                }).catch(function(error) {
+                                }).catch(function (error) {
                                     console.log(error);
                                 });
-                            }).catch(function(error) {
+                            }).catch(function (error) {
                                 console.log(error);
                             });
                         }, i * 400);

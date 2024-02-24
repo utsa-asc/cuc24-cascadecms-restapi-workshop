@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+</head>
+
+<body>
+    <script>
+        // const cmsUrl = "https://workshops.cascadecms.com/";
+        // const cmsAPI = "4454e28a-af16-4185-b6ad-dabe7c3e8b60";
+    </script>
+    <script src="../cascade-restapi.js"></script>
+    <script>
+        listSites({}).then(function (result) {
+            console.log(result);
+            var sites = result.apiReturn.sites;
+            sites.forEach(function (site) {
+                if (site.path.path.includes("CUC24")) {
+                    readAsset({
+                        type: "datadefinition",
+                        path: "Landing Page",
+                        siteName: site.path.path
+                    }).then(function (result) {
+                        console.log(result);
+                        result.apiReturn.asset.dataDefinition.xml = result.apiReturn.asset.dataDefinition.xml.replaceAll("site://CUC24 Intro Devs Workshop - Master/", "");
+                        editAsset({
+                            asset: result.apiReturn,
+                        }).then(function (result) {
+                            console.log(result);
+                        }).catch(function (error) {
+                            console.log(error);
+                        });
+                    }).catch(function (error) {
+                        console.log(error);
+                    });
+                }
+            });
+        }).catch(function (error) {
+            console.log(error);
+        });
+    </script>
+</body>
+
+</html>

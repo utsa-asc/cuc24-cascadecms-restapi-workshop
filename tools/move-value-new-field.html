@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+</head>
+
+<body>
+    <script>
+        // const cmsUrl = "https://ccis-admin.cascadecms.com/";
+        // const cmsAPI = "f4130d27-701c-4d3f-918e-dd34be021d4c";
+    </script>
+    <script src="../cascade-restapi.js"></script>
+    <script>
+
+        listSubscribers({
+            type: "structureddatadefinition",
+            id: "fb11b1e40a0000a17e376e73b6e578e9", // fill in
+        }).then(function (result) {
+            console.log(result);
+            result.apiReturn.subscribers.forEach(function (s) {
+                readAsset({
+                    type: s.type,
+                    id: s.id,
+                }).then(function (result) {
+                    console.log(result);
+                    result.apiReturn.asset.xhtmlDataDefinitionBlock.structuredData.structuredDataNodes[4].structuredDataNodes[1].text = result.apiReturn.asset.xhtmlDataDefinitionBlock.structuredData.structuredDataNodes[1].text;
+                    editAsset({
+                        asset: result.apiReturn,
+                    }).then(function (result) {
+                        console.log(result);
+                    }).catch(function (error) {
+                        console.log(error);
+                    });
+                }).catch(function (error) {
+                    console.log(error);
+                });
+            });
+        }).catch(function (error) {
+            console.log(error);
+        });
+    </script>
+</body>
+
+</html>
