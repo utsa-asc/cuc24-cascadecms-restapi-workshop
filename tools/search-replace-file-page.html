@@ -6,50 +6,83 @@
 
 <body>
     <script>
-        // const cmsUrl = "https://unk.cascadecms.com/";
-        // const cmsAPI = "e540eb9d-c641-415b-aa1f-6671982c08dd";
+        const cmsUrl = "https://unk.cascadecms.com/";
+        const cmsAPI = "e540eb9d-c641-415b-aa1f-6671982c08dd";
     </script>
     <script src="../cascade-restapi.js"></script>
     <script>
         search({
             searchInformation: {
-                searchTerms: "UniversLT",
+                // searchTerms: "https://fast.fonts.net/jsapi/a1632ffd-a0ce-4189-8ed1-72179838887d.js", // refs
+                // searchTerms: "https://fonts.googleapis.com/css2",
+                searchTerms: "'Univers", // names
                 searchTypes: ["Files"]
             }
-        }).then(function (result) {
+        }).then(function(result) {
             console.log(result);
-            result.apiReturn.matches.forEach(function (s) {
-                // if (s.path.path.includes("training/test1")) {
-                console.log(s);
-                // if (s.type == "file") {
-                //     checkCSS(s);
-                // } else if (s.type == "page") {
-                //     checkPage(s);
-                // };
-                // }
+            result.apiReturn.matches.forEach(function(s) {
+            //     // console.log(s.path.path.siteName);
+            //     // if (s.path.path.includes("training/test1")) {
+            //         // console.log(s);
+                    if (s.type == "file") {
+                        // checkCSS(s);
+                    } else if (s.type == "page") {
+                        // checkPage(s);
+                    } else if (s.type == "block") {
+                        // checkBlock(s);
+                    }
+            //     // }
             });
-        }).catch(function (error) {
+        }).catch(function(error) {
             console.log(error);
         });
+
+        function checkBlock(block) {
+            readAsset({
+                type: block.type,
+                id: block.id,
+            }).then(function(result) {
+                if (result.apiReturn.asset.xmlBlock) {
+                    console.log(result);
+                    // result.apiReturn.asset.xmlBlock.xml = result.apiReturn.asset.xmlBlock.xml.replaceAll('<script src="https://fast.fonts.net/jsapi/a1632ffd-a0ce-4189-8ed1-72179838887d.js" type="text/javascript"><\/script>', '<link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="crossorigin" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed&amp;family=Roboto:wght@100;300;400;500;700;900&amp;family=Big+Shoulders+Display:wght@100..900&amp;display=swap;" rel="stylesheet"/>').replaceAll('<script async="" src="https://fast.fonts.net/jsapi/a1632ffd-a0ce-4189-8ed1-72179838887d.js" type="text/javascript"><\/script>', '<link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="crossorigin" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed&amp;family=Roboto:wght@100;300;400;500;700;900&amp;family=Big+Shoulders+Display:wght@100..900&amp;display=swap;" rel="stylesheet"/>').replaceAll('<script defer="" src="https://fast.fonts.net/jsapi/a1632ffd-a0ce-4189-8ed1-72179838887d.js" type="text/javascript"><\/script>', '<link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="crossorigin" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed&amp;family=Roboto:wght@100;300;400;500;700;900&amp;family=Big+Shoulders+Display:wght@100..900&amp;display=swap;" rel="stylesheet"/>');
+                        var xmlblock = result.apiReturn.asset.xmlBlock.xml.replaceAll("<system-xml>","").replaceAll("</system-xml>","")
+                        xmlblock = "<system-xml>"+xmlblock+"</system-xml>";
+                        result.apiReturn.asset.xmlBlock.xml =  xmlblock;
+                        
+                    
+                } else {
+                    console.log("not a xmlblock");
+                }
+                editAsset({
+                    asset: result.apiReturn,
+                }).then(function(result) {
+                    console.log(result);
+                }).catch(function(error) {
+                    console.log(error);
+                });
+            }).catch(function(error) {
+                console.log(error);
+            });
+        }
 
         function checkPage(page) {
             readAsset({
                 type: page.type,
                 id: page.id,
-            }).then(function (result) {
+            }).then(function(result) {
                 console.log(result);
                 var structuredData = result.apiReturn.asset.page.structuredData.structuredDataNodes;
-                structuredData.forEach(function (node) {
+                structuredData.forEach(function(node) {
                     nodeCheck(node);
                 });
                 editAsset({
                     asset: result.apiReturn,
-                }).then(function (result) {
+                }).then(function(result) {
                     console.log(result);
-                }).catch(function (error) {
+                }).catch(function(error) {
                     console.log(error);
                 });
-            }).catch(function (error) {
+            }).catch(function(error) {
                 console.log(error);
             });
         }
@@ -57,16 +90,12 @@
         function nodeCheck(node) {
             // console.log(node)
             if (node.type == "group") {
-                node.structuredDataNodes.forEach(function (node2) {
+                node.structuredDataNodes.forEach(function(node2) {
                     nodeCheck(node2);
                 });
             } else if (node.type == "text" && node.text) {
                 // console.log(node.text);
-                node.text = node.text.replace('"UniversLTW01-57Condense_723821",arial,sans-serif;', "'Roboto Condensed', sans-serif;")
-                    .replace("'UniversLTW01-67BoldCn',arial,sans-serif;", "'Roboto', sans-serif; font-weight: 700;")
-                    .replace('"UniversLTW01-67BoldCn",arial,sans-serif;', "'Roboto', sans-serif; font-weight: 700;")
-                    .replace('"Univers LT W01_65 Bold",arial,sans-serif;', "'Roboto', sans-serif; font-weight: 700;")
-                    .replace("'Univers LT W01_55 Roman', Arial, sans-serif;", "'Roboto', sans-serif;");
+                node.text = node.text.replaceAll("'UniversLTW01-57Condense_723821', arial, sans-serif;", "'Roboto Condensed', sans-serif;").replaceAll("'UniversLTW01-67BoldCn', arial, sans-serif;", "'Roboto Condensed', sans-serif; font-weight: 700;").replaceAll("'UniversLTW01-57Condense_723818',arial,sans-serif;", "'Roboto Condensed', sans-serif;").replaceAll("'Univers LT W01_55 Roman',Arial,sans-serif;", "'Roboto', sans-serif;").replaceAll("'UniversLTW01-57Condense_723821',arial,sans-serif;", "'Roboto Condensed', sans-serif;").replaceAll("'UniversLTW01-67BoldCn',arial,sans-serif;", "'Roboto Condensed', sans-serif; font-weight: 700;").replaceAll("'Univers LT W01_65 Bold', arial, sans-serif;", "'Roboto', sans-serif; font-weight: 700;").replaceAll("'Univers LT W01_45 Light', arial, sans-serif;", "'Roboto', sans-serif; font-weight: 300;").replaceAll("'UniversLTW01-47LightCn', arial, sans-serif;", "'Roboto Condensed', sans-serif; font-weight: 300;").replaceAll("'UniversLTW01-57Condense_723821';", "'Roboto Condensed', sans-serif;").replaceAll("'Univers LT W01_49 Light Ult Cn', arial, sans-serif;", "'Big Shoulders Display', sans-serif;").replaceAll("'Univers LT W01_55 Roman', Arial, sans-serif;", "'Roboto', sans-serif;").replaceAll("'UniversLTW01-47LightCnO', arial, sans-serif;", "'Roboto Condensed', sans-serif; font-weight: 300;").replaceAll("'UniversLTW01-67BoldCn',arial, sans-serif;", "'Roboto Condensed', sans-serif; font-weight: 700;").replaceAll("'UniversLTW01-67BoldCn',arial, sans-serif;", "'Roboto Condensed', sans-serif; font-weight: 700;").replaceAll('"Univers LT W01_55 Roman",Arial,sans-serif;', "'Roboto', sans-serif;").replaceAll('"UniversLTW01-67BoldCn", arial, sans-serif;', "'Roboto Condensed', sans-serif; font-weight: 700;").replaceAll('"UniversLTW01-57Condense_723821", arial, sans-serif;', "'Roboto Condensed', sans-serif;").replaceAll('"UniversLTW01-47LightCn", arial, sans-serif;', "'Roboto Condensed', sans-serif; font-weight: 300;").replaceAll('"Univers LT Std 67 Bold Condensed", "Univers 55";', "'Roboto Condensed', sans-serif; font-weight: 700;").replaceAll('"UniversLTW01-67BoldCn",arial,sans-serif;', "'Roboto Condensed', sans-serif; font-weight: 700;").replaceAll('"UniversLTW01-57Condense_723821",arial,sans-serif;', "'Roboto Condensed', sans-serif;").replaceAll("UniversLTW01-57Condense_723821, arial, sans-serif;","'Roboto Condensed', sans-serif;");
             }
         }
 
@@ -74,22 +103,18 @@
             readAsset({
                 type: file.type,
                 id: file.id,
-            }).then(function (result) {
+            }).then(function(result) {
                 console.log(result);
                 // delete result.apiReturn.asset.file.data;
-                result.apiReturn.asset.file.text = result.apiReturn.asset.file.text.replace('"UniversLTW01-57Condense_723821",arial,sans-serif;', "'Roboto Condensed', sans-serif;")
-                    .replace("'UniversLTW01-67BoldCn',arial,sans-serif;", "'Roboto', sans-serif; font-weight: 700;")
-                    .replace('"UniversLTW01-67BoldCn",arial,sans-serif;', "'Roboto', sans-serif; font-weight: 700;")
-                    .replace('"Univers LT W01_65 Bold",arial,sans-serif;', "'Roboto', sans-serif; font-weight: 700;")
-                    .replace("'Univers LT W01_55 Roman', Arial, sans-serif;", "'Roboto', sans-serif;");
+                result.apiReturn.asset.file.text = result.apiReturn.asset.file.text.replaceAll("'UniversLTW01-57Condense_723821', arial, sans-serif;", "'Roboto Condensed', sans-serif;").replaceAll("'UniversLTW01-67BoldCn', arial, sans-serif;", "'Roboto Condensed', sans-serif; font-weight: 700;").replaceAll("'UniversLTW01-57Condense_723818',arial,sans-serif;", "'Roboto Condensed', sans-serif;").replaceAll("'Univers LT W01_55 Roman',Arial,sans-serif;", "'Roboto', sans-serif;").replaceAll("'UniversLTW01-57Condense_723821',arial,sans-serif;", "'Roboto Condensed', sans-serif;").replaceAll("'UniversLTW01-67BoldCn',arial,sans-serif;", "'Roboto Condensed', sans-serif; font-weight: 700;").replaceAll("'Univers LT W01_65 Bold', arial, sans-serif;", "'Roboto', sans-serif; font-weight: 700;").replaceAll("'Univers LT W01_45 Light', arial, sans-serif;", "'Roboto', sans-serif; font-weight: 300;").replaceAll("'UniversLTW01-47LightCn', arial, sans-serif;", "'Roboto Condensed', sans-serif; font-weight: 300;").replaceAll("'UniversLTW01-57Condense_723821';", "'Roboto Condensed', sans-serif;").replaceAll("'Univers LT W01_49 Light Ult Cn', arial, sans-serif;", "'Big Shoulders Display', sans-serif;").replaceAll("'Univers LT W01_55 Roman', Arial, sans-serif;", "'Roboto', sans-serif;").replaceAll("'UniversLTW01-47LightCnO', arial, sans-serif;", "'Roboto Condensed', sans-serif; font-weight: 300;").replaceAll("'UniversLTW01-67BoldCn',arial, sans-serif;", "'Roboto Condensed', sans-serif; font-weight: 700;").replaceAll("'UniversLTW01-67BoldCn',arial, sans-serif;", "'Roboto Condensed', sans-serif; font-weight: 700;").replaceAll('"Univers LT W01_55 Roman",Arial,sans-serif;', "'Roboto', sans-serif;").replaceAll('"UniversLTW01-67BoldCn", arial, sans-serif;', "'Roboto Condensed', sans-serif; font-weight: 700;").replaceAll('"UniversLTW01-57Condense_723821", arial, sans-serif;', "'Roboto Condensed', sans-serif;").replaceAll('"UniversLTW01-47LightCn", arial, sans-serif;', "'Roboto Condensed', sans-serif; font-weight: 300;").replaceAll('"Univers LT Std 67 Bold Condensed", "Univers 55";', "'Roboto Condensed', sans-serif; font-weight: 700;").replaceAll('"UniversLTW01-67BoldCn",arial,sans-serif;', "'Roboto Condensed', sans-serif; font-weight: 700;").replaceAll('"UniversLTW01-57Condense_723821",arial,sans-serif;', "'Roboto Condensed', sans-serif;").replaceAll("UniversLTW01-57Condense_723821, arial, sans-serif;","'Roboto Condensed', sans-serif;");
                 editAsset({
                     asset: result.apiReturn,
-                }).then(function (result) {
+                }).then(function(result) {
                     console.log(result);
-                }).catch(function (error) {
+                }).catch(function(error) {
                     console.log(error);
                 });
-            }).catch(function (error) {
+            }).catch(function(error) {
                 console.log(error);
             });
         }
