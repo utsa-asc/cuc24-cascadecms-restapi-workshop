@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head> </head>
+
+  <body>
+    <script src="../../cascade-restapi.js"></script>
+    <script>
+      // Note: To edit an asset, you should read it first, make your changes and then send the edited version of the asset back to the CMS
+
+      /* Exercise 1: Edit Video Block adding new YouTube Video ID field value */
+
+      /* Step 1.1: Locate the video block used on the index page (/blocks/video/video-1) and add asset id on line 19 */
+      /* Step 1.2: Follow instructor's demonstration of uncommenting code starting with read only then edit last */
+
+      //OLD COEHD Folder
+      readAsset({
+        type: "folder",
+        id: "ad6e098081736a1b36f691ba3816894d", // fill in
+      })
+        .then(function (result) {
+          //   console.log(result);
+          //console.log(result.apiReturn.asset.folder.children);
+          let items = result.apiReturn.asset.folder.children;
+          //   console.log(items);
+
+          //   items.forEach((item) => {
+          //     console.log(item.type);
+          //     console.log(item.path.path);
+          //     console.log(item.path.path.indexOf("index"));
+          //   });
+
+          items = items.filter((item) => {
+            return (
+              item.type === "page" && item.path.path.indexOf("index") === -1
+            );
+          });
+
+          //   console.log(items);
+
+          items.forEach((item) => {
+            readAsset({
+              type: "page",
+              id: item.id, // fill in
+            })
+              .then(function (oldEvent) {
+                console.log(oldEvent);
+                let pageInfo = oldEvent.apiReturn.asset.page;
+                let displayName = pageInfo.metadata.title;
+
+                let summary =
+                  pageInfo.structuredData.structuredDataNodes[5].text;
+                // console.log(summary === undefined);
+                summary = summary !== undefined ? summary : displayName;
+                // console.log("summary: ", summary);
+                // console.log("displayName: ", displayName);
+                let eventStart =
+                  pageInfo.structuredData.structuredDataNodes[0].text;
+                // console.log("eventStart: ", eventStart);
+                let eventEnd =
+                  pageInfo.structuredData.structuredDataNodes[1].text;
+                // console.log("eventEnd: ", eventEnd);
+                let endOfDay = parseInt(eventStart) + 3600000 * 2;
+                endOfDay = "" + endOfDay;
+                // console.log("endOfDay: ", endOfDay);
+                let allDay =
+                  pageInfo.structuredData.structuredDataNodes[2].text;
+                // console.log("allDay: ", allDay);
+                let imagePath =
+                  pageInfo.structuredData.structuredDataNodes[8].filePath;
+                if (imagePath) {
+                  if (imagePath.indexOf("event-images") > 0) {
+                    imagePath = imagePath.replaceAll("event-images", "events");
+                  } else if (imagePath.indexOf("news-images") >= 0) {
+                    console.log("imagePath: ", imagePath);                    
+                    imagePath = imagePath.replaceAll("news-images", "events").toLowerCase();
+                  } else if (imagePath.indexOf("dual-language-community-lab") >= 0) {
+                    console.log("imagePath: ", imagePath);                    
+                    imagePath = imagePath.replaceAll("dual-language-community-lab", "events").toLowerCase();
+                  }else if (imagePath.indexOf("images/") >= 0){
+                    console.log("imagePath: ", imagePath);                    
+                    imagePath = imagePath.replaceAll("images\/", "images\/events/").toLowerCase();
+                  }else{
+                    // console.log("Else");
+                  }
+                  // console.log("imagePath: ", imagePath);
+                }
+
+                let recurringEvent =
+                  pageInfo.structuredData.structuredDataNodes[11].text;
+                // console.log("recurringEvent: ", recurringEvent);
+                let sitePath = pageInfo.path;
+                // console.log("sitePath: ", sitePath);
+
+                // NEW COEHD Folder
+                readAsset({
+                  type: "page",
+                  path: sitePath, // fill in
+                  siteName: "COEHD-VPAA-DLS-HALSTORE", // fill in
+                })
+                  .then(function (result) {
+                    console.log(result);
+                    let newPageInfo = result.apiReturn.asset.page;
+                    // let newDisplayName = newPageInfo.metadata.displayName;
+                    // console.log(newDisplayName);
+                    newPageInfo.metadata.displayName = displayName;
+                    // let newSummary = newPageInfo.metadata.summary;
+                    newPageInfo.metadata.summary = summary;
+                    let newEventStart =
+                      newPageInfo.structuredData.structuredDataNodes[1];
+                    newEventStart.text = eventStart;
+                    let newEventEnd =
+                      newPageInfo.structuredData.structuredDataNodes[2];
+                    if (eventEnd) {
+                      newEventEnd.text = eventEnd;
+                    } else {
+                      newEventEnd.text = endOfDay;
+                    }
+
+                    if (imagePath) {
+                      let imageChoice =
+                        newPageInfo.structuredData.structuredDataNodes[5];
+                      imageChoice.text = "Yes";
+                      // let newImagePath =
+                      newPageInfo.structuredData.structuredDataNodes[6]
+                        .structuredDataNodes[0].filePath;
+
+                      newPageInfo.structuredData.structuredDataNodes[6].structuredDataNodes[0].filePath =
+                        newPageInfo.siteName + ":" + imagePath;
+                      let altText =
+                        newPageInfo.structuredData.structuredDataNodes[6]
+                          .structuredDataNodes[1];
+                      altText.text = displayName;
+                    }
+
+                    if (recurringEvent === "No") {
+                      let newRepeatValue =
+                        newPageInfo.structuredData.structuredDataNodes[7]
+                          .structuredDataNodes[0];
+                      newRepeatValue.text = "Once";
+                    }
+
+                    if (allDay === "Yes") {
+                      newPageInfo.structuredData.structuredDataNodes[3].text =
+                        "::CONTENT-XML-CHECKBOX::Yes";
+                    }
+
+                    editAsset({
+                      asset: result.apiReturn,
+                    })
+                      .then(function (result) {
+                        console.log(result);
+                      })
+                      .catch(function (error) {
+                        console.log(error);
+                      });
+                  })
+                  .catch(function (error) {
+                    console.log(error);
+                  });
+              })
+              .catch(function (error) {
+                console.log(error);
+              });
+          });
+
+          /* Note: Result is the object the read function returns
+                apiReturn is the read asset as object
+                using dot notation, we drill down the object property (page XML nodes) until we reach the specific node (field) we want
+                since this is a data definition block and the fields we want to edit are data definition fields, we want to look at the structure data nodes */
+          // var structuredData = result.apiReturn.asset.xhtmlDataDefinitionBlock.structuredData;
+          /* Note: Dot notation can get long, especially since all data in an asset is made up of nested nodes
+                inside of structuredData we have data definition information and nodes where the content lives 
+                all structuredData nodes are arrays of objects, even if there's only one object at the time */
+          // var video = structuredData.structuredDataNodes[0];
+          /* Note: Since all structuredData nodes are arrays, we need to target the first item of the array
+                all arrays start with an index of ZERO so the first item of the array is ZERO not ONE
+                console.log(video.identifier);
+                here, we're inside the video structure data node, you can confirm that by outputting the node identifier
+                inside the video node, there are 3 nodes, 1 for each field in the data definition 
+                each node will the following properties: type, identifier, text, etc
+                most data definition fields that take in a value will have type as text 
+                the identifier is the ID you give the field in the data definition 
+                the text is the actual value in the field, if the node doesn't have a text property, that means the field is empty/blank   */
+          // var videoEyebrowText = video.structuredDataNodes[0];
+          // var videoHeading = video.structuredDataNodes[1];
+          // var videoYouTubeID = video.structuredDataNodes[2];
+          /* Note: Split each node into its own var for easy visualization but at this time, we only want to edit the video itself */
+          // console.log(videoYouTubeID.text);
+          /* Note: Output old videoYouTubeID */
+          // videoYouTubeID.text = "J---aiyznGQ";
+          /* Note: change video YouTubeID value */
+          /* Note: As an object property, it's value can be replaced 
+                now the whole object is updated
+                REMINDER TO SHOW "copy property path" in DEV TOOLS
+                result.apiReturn.asset.xhtmlDataDefinitionBlock.structuredData.structuredDataNodes[0].structuredDataNodes[2].text = "As8iVB3l6uA";
+                this could also be done without defining multiple node vars
+                the array positions [] are great for data definitions that don't have any repeatable groups/fields */
+
+          // editAsset({
+          //     asset: result.apiReturn,
+          // }).then(function(result) {
+          //     console.log(result);
+          // }).catch(function(error) {
+          //     console.log(error);
+          // });
+
+          /*  Note: using the edit function, we send back the edited object */
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+</head>
+
+<body>
+    <script src="../../cascade-restapi.js"></script>
+    <script>
+        // Note: To move an asset, you have to provide the current asset's type, path/id and new folder information
+
+        /* Exercise 1: Move asset using asset and folder ID */
+
+        /* Step 1.1: Add a page ID to move from your site on line 23 */
+        /* Step 1.2: Add a destination folder ID from your site for where your page should be moved to on line 23 */
+        /* Step 1.3: Save, open file in browser, view console log */
+
+        readAsset({
+            type: "folder",
+            id: "ec5dcfea81736a1b76f225b341d58236", // fill in
+        })
+        .then(function (result) {
+        //   console.log(result);
+        //   console.log(result.apiReturn.asset.folder.children);
+          let items = result.apiReturn.asset.folder.children;
+          //   console.log(items);
+
+          //   items.forEach((item) => {
+          //     console.log(item.type);
+          //     console.log(item.path.path);
+          //     console.log(item.path.path.indexOf("index"));
+          //   });
+
+          items = items.filter((item) => {
+            return (
+              item.type === "page" && item.path.path.indexOf("index") === -1
+            );
+          });
+
+          items.forEach((item) => {
+            readAsset({
+              type: "page",
+              id: item.id, // fill in
+            })
+              .then(function (result) {
+                // console.log(result);
+                let startDate = result.apiReturn.asset.page.structuredData.structuredDataNodes[1].text;
+                let pageID = result.apiReturn.asset.page.id;
+                // console.log(pageID);
+                let parentFolder = result.apiReturn.asset.page.parentFolderPath;
+                // console.log(parentFolder);
+                startDate = new Date(parseInt(startDate));
+                let monthName = startDate.getMonth()+1;
+                if (monthName<10) {
+                    monthName = "0" + monthName; 
+                }else{
+                    monthName = monthName.toString(); 
+                }
+                // console.log(monthName);
+                let sitePath = parentFolder + "/" + monthName;
+                readAsset({
+                  type: "folder",
+                  path: sitePath, // fill in
+                  siteName: "COEHD-VPAA-DLS-HALSTORE", // fill in
+                })
+                  .then(function (result) {
+                    // console.log(result.apiReturn.asset.folder.id);
+                    let folderID = result.apiReturn.asset.folder.id;
+                    moveAsset({
+                        type: "page",
+                        id: pageID, // fill in
+                        moveParameters: {
+                            destinationContainerIdentifier: {
+                                id: folderID, // fill in
+                                type: "folder",
+                            }
+                        }
+                    }).then(function(result) {
+                        console.log(result);
+                    }).catch(function(error) {
+                        console.log(error);
+                        // Note: if you see the error "The selected folder could not be found." make sure the folder id/path is correct
+                    });                    
+                  }).catch(function (error) {
+                      console.log(error);
+                  });
+              }).catch(function (error) {
+                  console.log(error);
+              });  
+          });             
+        }).catch(function (error) {
+            console.log(error);
+        });
+
+        /* Exercise 2: Move asset using path and rename asset */
+
+        // Note: The move operation is also used for renaming assets
+
+        /* Step 2.1: Comment out Exercise 1 above from lines 18-32 */
+        /* Step 2.2: Uncomment out Exercise 2 below from lines 45-61 */
+        /* Step 2.3: Add a block path to move and your site name on line 47 Ex. blocks/testimonial/jan-thomas */
+        /* Step 2.4: Add a destination folder path and your site name for where your block should be moved to on line 51 */
+        /* Step 2.5: Add a new system name to rename your block on line 54 */
+        /* Step 2.6: Save, view console log, refresh browser */
+
+        // moveAsset({
+        //     type: "block",
+        //     path: "", // fill in
+        //     siteName: "", // fill in
+        //     moveParameters: {
+        //         destinationContainerIdentifier: {
+        //             id: "", // fill in
+        //             type: "folder",
+        //         },
+        //         newName: "", // fill in
+        //     }
+        // }).then(function(result) {
+        //     console.log(result);
+        // }).catch(function(error) {
+        //     console.log(error);
+
+        // });
+    </script>
+</body>
+
+</html>
