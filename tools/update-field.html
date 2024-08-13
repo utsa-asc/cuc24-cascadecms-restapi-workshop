@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+</head>
+
+<body>
+    <script>
+        const cmsUrl = "https://svp-admin.cascadecms.com/";
+        const cmsAPI = "";
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.1.0/papaparse.min.js"></script>
+    <script src="../cascade-restapi.js"></script>
+    <script>
+        listSubscribers({
+            type: "contenttype",
+            id: "6b7ba39b0a00009d3412b7f4fcc65f64",
+        }).then(function (result) {
+            // console.log(result);
+            var pages = result.apiReturn.subscribers;
+            pages.forEach(function (page, i) {
+                // setTimeout(function () {
+                if (i < 30) {
+                    readAsset({
+                        type: "page",
+                        id: page.id,
+                    }).then(function (result) {
+                        console.log(result.apiReturn.asset.page.id);
+                        // var readResult = result;
+                        // console.log(result.apiReturn.asset.page.structuredData.structuredDataNodes);
+                        // var sDN = result.apiReturn.asset.page.structuredData.structuredDataNodes;
+                        // sDN.forEach(function (node, iSDN) {
+                        //     if (node.identifier === "row" && node.type === "group") {
+                        //         // console.log(node);
+                        //         // console.log(node.structuredDataNodes);
+                        //         node.structuredDataNodes.forEach(function (nSDN, iNSDN) {
+                        //             if (nSDN.identifier === "type" && nSDN.type === "text" && nSDN.text === "Form - Marketing") {
+                        //                 node.structuredDataNodes.forEach(function (nSDN, iNSDN) {
+                        //                     if (nSDN.identifier === "mForm" && node.type === "group") {
+                        //                         nSDN.structuredDataNodes.forEach(function (nSDN2, iNSDN2) {
+                        //                             if (nSDN2.identifier === "referer" && nSDN2.type === "text") {
+                        //                                 nSDN2.text = "";
+                        //                                 editAsset({
+                        //                                     asset: result.apiReturn,
+                        //                                 }).then(function (result) {
+                        //                                     console.log(readResult.apiReturn.asset.page.id);
+                        //                                     console.log(readResult.apiReturn.asset.page.siteName);
+                        //                                     console.log(readResult.apiReturn.asset.page.path);
+                        //                                     console.log(result);
+                        //                                     console.log("--------");
+                        //                                 }).catch(function (error) {
+                        //                                     console.log(error);
+                        //                                 });
+                        //                             }
+                        //                         });
+                        //                     }
+                        //                 });
+                        //             }
+                        //         });
+                        //     }
+                        // });
+                    }).catch(function (error) {
+                        console.log(error);
+                    });
+                }
+                // }, i * 200);
+            });
+        }).catch(function (error) {
+            console.log(error);
+        });
+
+
+    </script>
+</body>
+
+</html>

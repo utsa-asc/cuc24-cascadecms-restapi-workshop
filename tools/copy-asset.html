@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+</head>
+
+<body>
+    <script>
+        // const cmsUrl = "https://svp-admin.cascadecms.com/";
+        // const cmsAPI = "";
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.1.0/papaparse.min.js"></script>
+    <script src="../cascade-restapi.js"></script>
+    <script>
+
+        var assetToCopyType = "folder";
+        var assetToCopyPath = ".well-known"; // .well-known
+        var assetToCopySite = "__Master Site Template";
+        var assetToCopyName = ".well-known"; // .well-known
+        var targetParentFolder = "/";
+
+        listSites({}).then(function (result) {
+            result.apiReturn.sites.forEach(function (site) {
+                if (!site.path.path.startsWith("_")) {
+                    // assetCopy(site);
+                }
+            });
+        }).catch(function (error) {
+            console.log(error);
+        });
+
+        function assetCopy(site) {
+            readAsset({
+                type: assetToCopyType,
+                path: assetToCopyPath,
+                siteName: site.path.path
+            }).then(function (result) {
+                console.log(site.path.path + "/" + assetToCopyPath + "/ already exists.");
+                console.log("-------");
+            }).catch(function (error) {
+                copyAsset({
+                    type: assetToCopyType,
+                    path: assetToCopyPath,
+                    siteName: assetToCopySite,
+                    copyParameters: {
+                        newName: assetToCopyName,
+                        destinationContainerIdentifier: {
+                            type: "folder",
+                            path: {
+                                path: targetParentFolder,
+                                siteName: site.path.path
+                            }
+                        }
+                    }
+                }).then(function (result) {
+                    console.log(result);
+                    console.log("site://" + site.path.path + "/" + assetToCopyPath + "/ created.");
+                    console.log("-------");
+                }).catch(function (error) {
+                    console.log(error);
+                    console.log("-------");
+                });
+            });
+        }
+
+
+    </script>
+</body>
+
+</html>

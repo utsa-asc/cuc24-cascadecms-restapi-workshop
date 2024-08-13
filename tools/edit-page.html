@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+</head>
+
+<body>
+    <script>
+        const cmsUrl = "https://svp-admin.cascadecms.com/";
+        const cmsAPI = "";
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.1.0/papaparse.min.js"></script>
+    <script src="../cascade-restapi.js"></script>
+    <script>
+        var sites;
+        var test = ["BETPET"];
+        var all = ["COAST", "BLOCK", "PMONT", "BETPET", "NOHARK", "APPAL", "CORNEL", "JARREL", "WHITE", "HRIDGE", "MORGAN", "ROSEV", "BARHIL", "LINDA", "PARKTX", "TOCARE", "FORCK", "GRAEF", "OAKDLE", "CYPRES", "ACADMY", "CARFOR", "CAROL", "COLLEG", "FCREEK", "VILLA", "PCCHAL", "NALL", "NIPPER", "SHELBY", "SSIDE", "ABSMEU", "AMCBAY", "COASTL", "SUNCTY", "BERNRD", "SEASDE", "ACREEK", "CARMEL", "ASPAH", "JASPER", "JUNALU", "DOUBLE", "AVERY", "SPORT", "VLGWAY", "FULLER", "GLADE", "ARKFL", "BARRY", "FRIEND", "PFIRST", "HARBOR", "NORLAK", "WYNNHA", "BESTIE", "BLAIRS", "BSTONE", "CHEIGH", "CLARKS", "MURRAY", "ROADS", "STAGE", "ZOOT", "AVONDL", "CHELSE", "GOODPR", "GOODWN", "HELENA", "MADI", "TAYLOR", "VESTAV", "AGAPE", "BARBUR", "HENDER", "HILSDE", "HURST", "LYNDON", "MIDDLE", "MOBLEY", "RICHAC", "VILVET", "GWINN", "JONESB", "SOWOOD", "SUWANE", "CROSBY", "BAYS", "BRIGHT", "SEILER", "SOPAW", "SUNSHN", "BLUFF", "BREVAR", "CPARK", "NGREEN", "PEVEPN", "WRUFF", "CHESAP", "COMMON", "POWHAT", "WELLES", "DENTON", "FLOWER", "GOLDEN", "YUKON", "BEACHS", "BESTFR", "GATEWY", "BRODIE", "BRUNS", "OAKISL", "RIVERF", "RIVERS", "WILMIN", "KENTLN", "LAKFOR", "PLAZA", "SIGNAL", "STANDR", "TOWNE", "BRITAH", "DOERR", "MEMPAC", "CROSS", "SUNVLY", "AMRICH", "PONTEV", "PORTCH", "CMAC", "ESIDE", "JONES", "PCHAP", "PLESVA", "STEWRT", "CLAYTN", "SHORES", "VDALE", "ANCARE", "POPLAR", "CHEVY", "FIVE", "AMOUR", "COLVET", "FLTCRK", "INMAN", "AHWOOD", "BEENUT", "DURHAM", "FOREST", "KASPER", "KIRBY", "SIENNA", "TENDER", "DELRAY", "ENGLE", "FOUNT", "JUPITR", "KENDAL", "LARGO", "MARCO", "PORTAC", "SIERRA", "SUMMIT", "TYRONE", "BONNIE", "CDLCRK", "HCREST", "CHIMNE", "WEALTH", "BETTYB", "DOGCAT", "EBEACH", "POUNCE", "ALLCRT", "BONDS", "FARREL", "HARVST", "HIVILL", "KELLER", "NDALLA", "PARKS", "AIKEN", "CEDAR", "PLANT", "SUBURB", "COMMUN", "DEERFL", "GRIFFI", "LAKAUS", "TICKLE", "WGATE", "FIRETR", "HILTOP", "PINHUR", "PITTCO", "TENST", "WSTSDE", "GOOSE", "LOUDON", "LYNNAH", "NOWIND", "REISMS", "AUGUST", "CHAN", "CHAND", "DREAM", "POWER", "SANTAN", "SCOTT", "TRICTY", "VAL", "BPARK", "DORADO", "HOLT", "HOOVES", "LEGACY", "MCKIN", "MELISS", "PLANO", "SUMMER", "WEST", "BOYD", "FAITH", "GARDEN", "LAWOOD", "PARKCO", "PLUM", "RISING", "SPECFR", "TAILS", "MELTON", "SOUNDS", "WALKER", "BUTLER", "CEDARC", "BUTTER", "CRESAR", "CREST", "CRESTR", "GTOWN", "OLDTOW", "PARMER", "PETMED", "BROAD", "RIVCIT", "HMLOCK", "SHORAC", "JUNOB", "KINDAH", "CHARST", "MIDLO", "HASLET", "FAMVET", "DCROSS", "DODD", "HERBST", "CASTLE", "MOORE", "OAKVW", "MTNAHC", "WESDEN", "ABADIE"];
+
+        listSites({}).then(function (result) {
+            sites = result.apiReturn.sites;
+            // console.log(sites);
+            // copyFolder("services/wellness-prevention/parasite-prevention", "services/wellness-prevention", test);
+            // copyFolder("services/wellness-prevention/parasite-prevention", "services/wellness-prevention", all);
+            // copyFolder("services/wellness-prevention/parasite-prevention", "services/wellness-prevention", biz);
+            // copyFolder("services/wellness-prevention/parasite-prevention", "services/wellness-prevention", ez);
+            editPage("services/wellness-prevention", all);
+        }).catch(function (error) {
+            console.log(error);
+        });
+
+        function editPage(folderPath, targetSites) {
+            targetSites.forEach(function (tS) {
+                console.log(tS);
+                sites.forEach(function (site) {
+                    if (site.path.path.startsWith(tS + " -")) {
+                        console.log(site);
+                        readAsset({
+                            type: "folder",
+                            path: "services/wellness-prevention/parasite-prevention",
+                            siteName: site.path.path
+                        }).then(function (result) {
+                            console.log(result);
+                            result.apiReturn.asset.folder.shouldBeIndexed = true;
+                            result.apiReturn.asset.folder.shouldBePublished = true;
+                            editAsset({
+                                asset: result.apiReturn,
+                            }).then(function (result) {
+                                console.log(result);
+                                publishAsset({
+                                    type: "folder",
+                                    siteName: site.path.path,
+                                    path: folderPath,
+                                    publishInformation: {
+                                        publishRelatedAssets: "true"
+                                    }
+                                }).then(function (result) {
+                                    console.log(result);
+                                    console.log("-------");
+                                }).catch(function (error) {
+                                    console.log(error);
+                                });
+                            }).catch(function (error) {
+                                console.log(error);
+                            });
+
+                        }).catch(function (error) {
+                            console.log(error);
+                        });
+
+                    }
+                });
+
+            });
+
+
+        }
+
+    </script>
+</body>
+
+</html>
