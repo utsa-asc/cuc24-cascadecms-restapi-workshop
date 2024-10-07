@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+</head>
+
+<body>
+    <script>
+        //   SVP
+        // const cmsUrl = "https://svp-admin.cascadecms.com/";
+        // const cmsAPI = "";
+    </script>
+    <script src="../cascade-restapi.js"></script>
+    <script>
+
+        var assetToReadType = "page";
+        var assetToReadPath = "privacy-policy";
+
+        listSites({}).then(function (result) {
+            result.apiReturn.sites.forEach(function (site) {
+                if (!site.path.path.startsWith("_")) {
+                    // assetEdit(site);
+                }
+            });
+        }).catch(function (error) {
+            console.log(error);
+        });
+
+        function assetEdit(site) {
+            readAsset({
+                type: assetToReadType,
+                path: assetToReadPath,
+                siteName: site.path.path
+            }).then(function (result) {
+                console.log(result);
+                // METADATA FIELD VALUE POSITION 
+                result.apiReturn.asset.page.metadata.dynamicFields[3].fieldValues[0].value = "Yes";
+                editAsset({
+                    asset: result.apiReturn,
+                }).then(function (result) {
+                    console.log(result);
+                    console.log("-------");
+                }).catch(function (error) {
+                    console.log(error);
+                    console.log("-------");
+                });
+            }).catch(function (error) {
+                console.log(error);
+                console.log("-------");
+            });
+        }
+
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+</head>
+
+<body>
+    <script>
+        const cmsUrl = "https://midmich-admin.cascadecms.com/";
+        const cmsAPI = "3cb0dc2d-7478-4d2f-9730-9d3c43c386d6";
+    </script>
+    <script src="../cascade-restapi.js"></script>
+    <script>
+
+        var ctID = "8a0d45270a0000ec49c4cdb77bb4f4a1";
+
+
+
+        // readAsset({
+        //     type: "page",
+        //     id: "d1d2b0890a0000ec0849f5293766adf1",
+        // }).then(function (result) {
+        //     console.log(result);
+        //     delete result.apiReturn.asset.page.metadata.reviewDate;
+        //     editAsset({
+        //         asset: result.apiReturn,
+        //     }).then(function (result) {
+        //         console.log(result);
+        //     }).catch(function (error) {
+        //         console.log(error);
+        //     });
+        // }).catch(function (error) {
+        //     console.log(error);
+        // });
+
+        updateMetadata();
+
+
+        function updateMetadata() {
+            listSubscribers({
+                type: "contenttype",
+                id: ctID,
+            }).then(function (result) {
+                // console.log(result);
+                var pages = result.apiReturn.subscribers;
+                pages.forEach(function (page, i) {
+                    // console.log(page);
+                    setTimeout(function () {
+                        // if (i < 3) {
+                        if (page.type == "page") {
+                            readAsset({
+                                type: "page",
+                                id: page.id,
+                            }).then(function (result) {
+                                console.log(result);
+                                var mdValue = result.apiReturn.asset.page.metadata.reviewDate;
+                                if (mdValue != undefined) {
+                                    delete result.apiReturn.asset.page.metadata.reviewDate;
+                                    editAsset({
+                                        asset: result.apiReturn,
+                                    }).then(function (result) {
+                                        console.log(result);
+                                        console.log("-----");
+                                    }).catch(function (error) {
+                                        console.log(error);
+                                    });
+                                } else {
+                                    console.log("-----");
+                                }
+                            }).catch(function (error) {
+                                console.log(error);
+                            });
+                        }
+                        // }
+                    }, i * 200);
+                });
+            }).catch(function (error) {
+                console.log(error);
+            });
+        }
+    </script>
+</body>
+
+</html>
