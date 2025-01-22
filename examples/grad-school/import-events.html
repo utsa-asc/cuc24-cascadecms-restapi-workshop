@@ -14,13 +14,13 @@
       /* Step 1.4: Follow instructor's demonstration as the script is reviewed */
 
       var baseAssetID = "fc5f45d581736a1b632bd721fb698bc8"; // fill in
-      var eventFolderPath = "events/2024"; // fill in
+      var eventFolderPath = "events/2025"; // fill in
       var eventSiteName = "GRADUATESCHOOL-VPAA-ASC-HALSTORE"; // fill in
 
       // Note: Papa Parse is a free JS library that makes reading CSV files super easy
       // https://www.papaparse.com
 
-      Papa.parse("csv/Fall-24-GS-Eventscsv.csv", {
+      Papa.parse("csv/Spring-2025-GS-Events.csv", {
         header: true,
         download: true,
         skipEmptyLines: true,
@@ -46,6 +46,11 @@
           let eventStartDate = t.EventStartDate;
           let eventEndDate = t.EventEndDate;
           let eventStartTime = t.EventStartTime;
+          //check if a variable has a "/" in it
+          let eventMonth = eventStartDate.substring(0, 2);
+          if(eventMonth.includes("/")){
+            eventMonth = "0" + eventMonth.substring(0, 1);
+          }
           let eventEndTime = t.EventEndTime;
           let allDayEvent = t.AllDayEvent;
           let defaultImage = t.DefaultImage;
@@ -80,7 +85,7 @@
               destinationContainerIdentifier: {
                 type: "folder",
                 path: {
-                  path: eventFolderPath + "/" + eventStartDate.substring(0, 2),
+                  path: eventFolderPath + "/" + eventMonth,
                   siteName: eventSiteName,
                 },
               },
@@ -94,7 +99,7 @@
                 path:
                   eventFolderPath +
                   "/" +
-                  eventStartDate.substring(0, 2) +
+                  eventMonth +
                   "/" +
                   newPageName,
                 siteName: eventSiteName,
