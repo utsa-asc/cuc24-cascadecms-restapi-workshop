@@ -3,18 +3,6 @@
   <head> </head>
 
   <body>
-    <script src="/tinymce/tinymce.min.js" referrerpolicy="origin"></script>
-    <script>
-        tinymce.init({
-          selector: '#mytextarea',
-          license_key: 'gpl',
-          element_format: 'xhtml',
-          entity_encoding: 'numeric',
-          convert_urls: false,
-          valid_elements: '@[class|style|id],-span[!class|!style],p,-strong/b,-em/i,-h1,-h2,-h3,-h4,-h5,-h6,-blockquote,-pre,-ul[type],-li[value],-ol[reversed|start],iframe[*],br,figure,-figcaption,hr,table[*],-thead,-tbody,-tr[*],td[*],-th[*],-tfoot,-code,-picture,-source,-script,-style,-sub,-sup,-video,-abbr,-address,-cite,-dd,-dl,-dt,-pre,-svg,-time,img[!src|alt|width|height|loading=lazy],-a[!href|!name|target|title|rel]',
-          extended_valid_elements: 'script[src|async|defer|type|charset]'
-        });
-      </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.1.0/papaparse.min.js"></script>
     <script src="../../cascade-restapi.js"></script>
     <script>
@@ -32,8 +20,9 @@
       // Note: Papa Parse is a free JS library that makes reading CSV files super easy
       // https://www.papaparse.com
 
-      Papa.parse("csv/Fall-2025-UCC-Events-test.csv", {
+      Papa.parse("csv/ucc-events-test-cleaned.csv", {
         header: true,
+        encoding: "utf-8",
         download: true,
         skipEmptyLines: true,
         transformHeader: function (h) {
@@ -46,9 +35,12 @@
       });
 
       function unicodeToHtmlEntities(str) {
-        return str.replace(/./g, function (char) {
+        // Since CSV is pre-cleaned, just handle remaining edge cases
+        str = str.replace(/\u00A0/g, " "); // Replace non-breaking spaces with regular spaces
+        
+        // Convert any remaining emojis to HTML entities (shouldn't be many after CSV cleaning)
+        return str.replace(/[\u{1F300}-\u{1F9FF}]|[\u{1FA00}-\u{1FAFF}]|[\u{2600}-\u{27BF}]|[\u{1F004}-\u{1F0CF}]|[\u{1F170}-\u{1F251}]/gu, function (char) {
           const codePoint = char.codePointAt(0);
-
           return `&#${codePoint};`;
         });
       }
@@ -59,27 +51,15 @@
         return p.innerHTML;
       }
 
-      // Function to convert text with line breaks to HTML with <br/> tags
-      function convertTextToHTML(plainText) {
-          if (!plainText) return '';
-          
-          // Initialize TinyMCE if not already done
-          if (!tinymce.activeEditor) {
-              console.log('TinyMCE not initialized yet. Please wait...');
-              return plainText;
-          }
-          
-          // Replace line breaks with <br/> tags
+      // Replace line breaks with <br/> tags
+      function convertBreaks(plainText) {
           let htmlContent = plainText
               .replace(/\r\n/g, '<br/>') // Windows line breaks
               .replace(/\n/g, '<br/>')   // Unix/Mac line breaks
               .replace(/\r/g, '<br/>');  // Old Mac line breaks
-          
-          // Set content in TinyMCE to clean and format it
-          tinymce.activeEditor.setContent(htmlContent);
-          
-          // Get the cleaned HTML content
-          return tinymce.activeEditor.getContent();
+          console.log('htmlContent:');
+          console.dir(htmlContent);
+          return htmlContent;
       }
 
       function importTestimonials(data) {
@@ -172,10 +152,11 @@
                     newPageInfo.structuredData.structuredDataNodes[0].text =
                       "::CONTENT-XML-CHECKBOX::Yes";
                   }
+                  details=escapeHTML(details);
+                  details=convertBreaks(details);
+                  console.log(details);
 
-                  details=convertTextToHTML(details);
-
-                  newPageInfo.structuredData.structuredDataNodes[8].text = unicodeToHtmlEntities(details); //details;
+                  newPageInfo.structuredData.structuredDataNodes[8].text = details;
                   newPageInfo.structuredData.structuredDataNodes[9].text =
                     location;
 
