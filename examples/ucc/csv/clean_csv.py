@@ -24,6 +24,9 @@ def clean_text(text):
         # Specifically handle U+2019 right single quotation mark
         elif ord(char) == 8217:  # U+2019 right single quotation mark
             result += '&#8217;'
+        # Convert bullet character "â€¢" to HTML entity
+        elif char == 'â€¢':
+            result += '&#8226;'
         else:
             # Convert non-standard characters to HTML entities
             result += char_to_html_entity(char)
