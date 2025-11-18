@@ -3,7 +3,7 @@
   <head> </head>
 
   <body>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.1.0/papaparse.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js" integrity="sha512-dfX5uYVXzyU8+KHqj8bjo7UkOdg18PaOtpa48djpNbZHwExddghZ+ZmzWT06R5v6NSk3ZUfsH6FNEDepLx9hPQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="../../cascade-restapi.js"></script>
     <script>
       /* Exercise 1: Automate creating multiple simple testimonial blocks by reading from csv file (/workshop-scripts/csv/testimonials.csv) */
@@ -13,14 +13,14 @@
       /* Step 1.3: Add the testimonial block site name on line 20 */
       /* Step 1.4: Follow instructor's demonstration as the script is reviewed */
 
-      var baseAssetID = "d39373a581736a1b3e3d88669cccf37b"; // fill in
+      var baseAssetID = "f265071381736a2d09bfc4a30c5b71be"; // fill in
       var eventFolderPath = "events/calendar/2025"; // fill in
       var eventSiteName = "UCC-VPAA-ASC-HALSTORE"; // fill in
 
       // Note: Papa Parse is a free JS library that makes reading CSV files super easy
       // https://www.papaparse.com
 
-      Papa.parse("csv/Fall-2025-UCC-Events.csv", {
+      Papa.parse("csv/Fall-2025-UCC-Events_html_entities.csv", {
         header: true,
         download: true,
         skipEmptyLines: true,
@@ -43,7 +43,7 @@
 
       function escapeHTML(text) {
         const p = document.createElement('p');
-        p.innerText = text;
+        p.innerText = text; // or p.textContent = text;
         return p.innerHTML;
       }
 
@@ -140,7 +140,7 @@
 
                   details=escapeHTML(details);
 
-                  newPageInfo.structuredData.structuredDataNodes[8].text = unicodeToHtmlEntities(details); //details;
+                  newPageInfo.structuredData.structuredDataNodes[8].text = details; //details;
                   newPageInfo.structuredData.structuredDataNodes[9].text =
                     location;
 

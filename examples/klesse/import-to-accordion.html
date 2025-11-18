@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head> </head>
+
+  <body>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.1.0/papaparse.min.js"></script>
+    <script src="../../cascade-restapi.js"></script>
+    <script>
+      /* Exercise 1: Automate creating multiple simple testimonial blocks by reading from csv file (/workshop-scripts/csv/studentProjects.csv) */
+
+      /* Step 1.1: Locate the testimonial block base asset (/_cms/base-assets/blocks/testimonial) and add the asset ID on line 18 */
+      /* Step 1.2: Add the testimonial block folder path (in the block folder) which will be where our new blocks will be created on line 19 */
+      /* Step 1.3: Add the testimonial block site name on line 20 */
+      /* Step 1.4: Follow instructor's demonstration as the script is reviewed */
+
+      var baseAssetID = "938061ef81736a2d20e37017bca66ae4"; // fill in
+      var studentProjectsFolderPath = "symposium/_blocks/f25"; // fill in
+      var studentProjectsSiteName = "KLESSE-VPAA-ASC-HALSTORE"; // fill in
+
+      // Note: Papa Parse is a free JS library that makes reading CSV files super easy
+      // https://www.papaparse.com
+
+      Papa.parse("csv/Design-I-Final-f25.csv", {
+        header: true,
+        download: true,
+        skipEmptyLines: true,
+        transformHeader: function (h) {
+          return h.replace(/[\W_]+/g, "").trim();
+        },
+        complete: function (result) {
+          console.log(result);
+          importStudentProjects(result.data);
+        },
+      });
+
+      function importStudentProjects(data) {
+        // data.forEach(function (t) {
+        // Note: loop over the studentProjects
+
+        // console.log(t);
+        // Note: output each testimonial as an object
+
+        // console.log(t.quote);
+        // console.log(t.quotee);
+        // console.log(t.year);
+        // Note: output each testimonial individual property/value
+
+        var newBlockName = "accordion-group-design-I-f25"
+          .toLowerCase()
+          .replaceAll(/[^a-z0-9-]/gi, "-")
+          .trim();
+        // Note: format the testimonial quotee to the correct format needed for the block name
+
+        // console.log(newBlockName);
+        // Note: output newBlockName to verify its correct
+
+        // Note: copy block using asset path and folder path defined above
+        // #1 first we copy
+        copyAsset({
+          type: "block",
+          id: baseAssetID,
+          copyParameters: {
+            newName: newBlockName,
+            destinationContainerIdentifier: {
+              type: "folder",
+              path: {
+                path: studentProjectsFolderPath,
+                siteName: studentProjectsSiteName,
+              },
+            },
+          },
+        })
+          .then(function (result) {
+            console.log(result);
+            // #2 then we read
+            readAsset({
+              type: "block",
+              path: studentProjectsFolderPath + "/" + newBlockName,
+              siteName: studentProjectsSiteName,
+              // Note: the copy operation does NOT return a new asset ID so we use the same global vars we used to create the copy to read the copy
+            })
+              .then(function (result) {
+                // console.log(data);
+                // console.log(data.length);
+                var studentInfo =
+                  result.apiReturn.asset.xhtmlDataDefinitionBlock.structuredData
+                    .structuredDataNodes[0].structuredDataNodes;
+                var firstItem = studentInfo[3];
+                console.log(firstItem);
+
+                data.forEach(function (t, idx) {
+                  // console.log(t);
+                  idx = idx + 3;
+                  studentInfo[idx] = JSON.parse(JSON.stringify(firstItem));
+                  // console.log(studentInfo);
+                  // TeamName
+                  // console.log(firstItem);
+                  // console.log(studentInfo[i]);
+                  if (t.TeamName === "") {
+                    return;
+                  }
+                  // console.log(studentInfo[i].structuredDataNodes[0].text);
+                  // TODO: remove all "&" and replace them with the html entity code
+                  studentInfo[idx].structuredDataNodes[0].text = t.TeamName; // TeamName
+                  var sponsorText = t.SponsorName
+                    ? "<br />Sponsor: " + t.SponsorName
+                    : "";
+                  studentInfo[idx].structuredDataNodes[1].text =
+                    "<p><strong>" +
+                    t.ProjectTitle +
+                    "</strong> | " +
+                    t.ProjectAbstract +
+                    sponsorText +
+                    "</p>"; // ProjectTitle
+                  // studentInfo[2].text = t.ProjectAbstract; // ProjectAbstract
+                });
+
+                // Note: update the testimonial fields
+                editAsset({
+                  asset: result.apiReturn,
+                })
+                  .then(function (result) {
+                    console.log(result);
+                  })
+                  .catch(function (error) {
+                    console.log(error);
+                  });
+                // Note: using the edit function, we send back the edited object
+              })
+              .catch(function (error) {
+                console.log(error);
+              });
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+        console.log("----");
+        // Note: a separator to make the log easy to read
+        // });
+      }
+    </script>
+  </body>
+</html>
